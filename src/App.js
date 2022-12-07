@@ -2,10 +2,17 @@ import React, {useCallback, useContext, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/Layout/Layout';
 import { Home } from './pages/home';
-import { Order } from './pages/order';
-import { Myorder } from './pages/myorder';
-import { Check } from './pages/check';
+import { Tulkur } from './pages/tulkur';
+
+import { AddInterpreter } from './pages/addInterpreter';
+import { ProjectList } from './pages/projectList';
+import { AddProject } from './pages/addproject';
+import { ChangeProject } from './pages/changeProject';
+import { RemoveProject } from './pages/removeProject';
+import { StadaProject } from './pages/stadaProject';
+
 import { NotFound } from './pages/404';
+
 import { Login } from './pages/login';
 import { Register } from './pages/register';
 import { Reset } from './pages/reset';
@@ -49,9 +56,15 @@ function App() {
         <Layout>
           <Routes>
             <Route exact path="/" element={<Home />} />
-            <Route exact path="/order" element={<Order />} />
-            <Route exact path="/myorder" element={<Myorder />} />
-            <Route exact path="/check" element={<Check />} />
+            <Route exact path="/tulkur" element={<Tulkur />} />
+            <Route exact path="/nyrtulkur" element={<AddInterpreter />} />
+
+            <Route exact path="/verkefnalisti" element={<ProjectList />} />
+            <Route exact path="/nyttverkefni" element={<AddProject />} />
+            <Route exact path="/breytaverkefni" element={<ChangeProject />} />
+            <Route exact path="/eydaverkefni" element={<RemoveProject />} />
+            <Route exact path="/stadaverkefni" element={<StadaProject />} />
+            
             <Route path="*" element={<NotFound/> } />
           </Routes>
         </Layout>
