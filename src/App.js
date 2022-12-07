@@ -5,7 +5,7 @@ import { Home } from './pages/home';
 import { Tulkur } from './pages/tulkur';
 
 import { AddInterpreter } from './pages/addInterpreter';
-import { ProjectList } from './pages/projectList';
+import { ProjectList } from './pages/projectList';9
 import { AddProject } from './pages/addproject';
 import { ChangeProject } from './pages/changeProject';
 import { RemoveProject } from './pages/removeProject';
