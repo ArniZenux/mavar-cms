@@ -4,10 +4,11 @@ import { Column } from 'primereact/column';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-export function ChangeProjectForm(id) {
+export function DeleteP(  { id }  ) {
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
   const [APIData, setAPIData] = useState([]);
+  //let success = true; 
 
   useEffect(() => {
       async function fetchData(){

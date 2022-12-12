@@ -8,7 +8,7 @@ import { AddInterpreter } from './pages/addInterpreter';
 import { ProjectList } from './pages/projectList';
 import { AddProject } from './pages/addproject';
 import { ChangeProject } from './pages/changeProject';
-import { RemoveProject } from './pages/removeProject';
+import { DeleteProject } from './pages/deleteProject';
 import { StadaProject } from './pages/stadaProject';
 
 import { NotFound } from './pages/404';
@@ -62,7 +62,7 @@ function App() {
             <Route exact path="/verkefnalisti" element={<ProjectList />} />
             <Route exact path="/nyttverkefni" element={<AddProject />} />
             <Route exact path="/breytaverkefni" element={<ChangeProject />} />
-            <Route exact path="/eydaverkefni" element={<RemoveProject />} />
+            <Route exact path="/eydaverkefni" element={<DeleteProject />} />
             <Route exact path="/stadaverkefni" element={<StadaProject />} />
             
             <Route path="*" element={<NotFound/> } />
