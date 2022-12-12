@@ -54,7 +54,12 @@ return (
             <li>
               <NavLink className="p-ripple flex px-4 p-3 lg:px-3 lg:py-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150 w-full" style={{ textDecoration: 'none' }} to={`/tulkur`}>
                 <i className="pi pi-list mr-2"></i>
-                <span className="font-medium">Túlkalisti</span>
+                <span className="font-medium">Verkefnalisti túlka</span>
+                <Ripple />
+              </NavLink>
+              <NavLink className="p-ripple flex px-4 p-3 lg:px-3 lg:py-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150 w-full" style={{ textDecoration: 'none' }} to={`/tulkur`}>
+                <i className="pi pi-list mr-2"></i>
+                <span className="font-medium">Túlkar</span>
                 <Ripple />
               </NavLink>
               <NavLink className="p-ripple flex px-4 p-3 lg:px-3 lg:py-3 align-items-center text-600 hover:text-900 hover:surface-100 transition-colors transition-duration-150 w-full" style={{ textDecoration: 'none' }} to={`/nyrtulkur`}>

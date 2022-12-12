@@ -1,11 +1,11 @@
 import React, {useCallback, useContext, useEffect } from 'react'; 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 import { Layout } from './components/Layout/Layout';
 import { Home } from './pages/home';
 import { Tulkur } from './pages/tulkur';
-
 import { AddInterpreter } from './pages/addInterpreter';
-import { ProjectList } from './pages/projectList';9
+import { ProjectList } from './pages/projectList';
 import { AddProject } from './pages/addproject';
 import { ChangeProject } from './pages/changeProject';
 import { RemoveProject } from './pages/removeProject';
@@ -39,7 +39,7 @@ function App() {
     verifyUser();
   }, [verifyUser]);
 
-  return !userContext.token ? (
+  return userContext.token ? (
     <div>
        <BrowserRouter>
           <Routes>

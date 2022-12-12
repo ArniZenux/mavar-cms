@@ -47,10 +47,10 @@ export function LoginForm() {
     await fetch(apiUrl + '/login', requestOptions)
       .then(async res => {
         console.log(res);
-        const datx = await res.json(); 
-        console.log(datx); 
+        const data_token = await res.json(); 
+        console.log(data_token); 
         setUserContext(oldValues => 
-          { return { ...oldValues, token:datx.token }
+          { return { ...oldValues, token:data_token.token }
         });
       })
       .catch(err => {

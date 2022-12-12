@@ -1,11 +1,19 @@
-//import React, { useEffect, useState  } from 'react';
+import React, { useEffect, useState  } from 'react';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+//import { Calendar } from "primereact/calendar";
+//import { Dropdown } from 'primereact/dropdown';
+//import { InputText } from 'primereact/inputtext';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function Project(  { id }  ) {
-/*  const [loading, setLoading] = useState(false); 
+  //let [day, setDay] = useState(new Date());
+  const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
-  const [APIData, setData] = useState([]);
+  const [APIData, setAPIData] = useState([]);
+  //const [editingRows, setEditingRows] = useState({});
+  //let success = true; 
 
   useEffect(() => {
       async function fetchData(){
@@ -13,16 +21,18 @@ export function Project(  { id }  ) {
       setError(null); 
 
       let json; 
-      const apiUrlId = apiUrl + '/tulkur/tulkurskoda/';
+      const apiUrlId = apiUrl + '/project';
       const url = new URL(id, apiUrlId); 
 
       try {
-        const result = await fetch(url); 
+        const result = await fetch(apiUrl + `/project`);
         
         if(!result.ok){
           throw new Error('Ekki ok');
         }
         json = await result.json();
+        console.log(json); 
+
       }
       catch(e){
         console.warn('unable to fetch data', e); 
@@ -32,79 +42,100 @@ export function Project(  { id }  ) {
       finally{
         setLoading(false); 
       }
-      setData(json);
+      setAPIData(json);
      }
    
     fetchData(); 
   }, [id]);
+ 
+/*  const onRowEditComplete2 = async (e) => {
+    let _APIData = [...APIData];
+    let { newData, index } = e;
+
+    _APIData[index] = newData;
+
+    try {
+
+      if( newData.nafn === '' || newData.simi === '' || newData.netfang === '' ) {
+        console.log('Empty');
+      }
+       else {
+        const requestOptions = {
+          method: 'PUT',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newData)
+        };
+        
+        success = await fetch(apiUrl + '/project/updateproject/' + newData.id, requestOptions);
+       
+        setAPIData(_APIData);
+        }
+      }
+      catch(e){
+        console.log("Error", e);     
+    }
+  }*/
+
+  /*const onRowEditChange = (e) => {
+    setEditingRows(e.data);
+  }*/
+
+  /*const textEditor = (options) => {
+    return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
+  }
+
+  const dateEditor = (options) => {
+    return <Calendar id="dagtal" value={day} onChange={(e) => setDay(e.target.value)} dateFormat="dd/mm/yy" mask="99/99/9999" />
+  }
+
+  const timeStartEditor = (options) => {
+    return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
+  }
+
+  const timeEndEditor = (options) => {
+    return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
+  }*/
 
   if(error){
     return (
-     <div className={TT.tulkur__wrapper}>
-        <p className={TT.tulkur__p}> Skoða verkefnalisti túlka   </p>
-        <p className={TT.tulkur__p}> Nær ekki samband í þjónustu - Eitthvað klikkar! </p>
-     </div>
+      <div className="card">
+        <div className="text-900 text-3xl font-medium mb-3">Nær ekki samband við vefþjónustuna...</div>
+      </div>
     )
   }
 
   if(loading){
     return (
-     <div className={TT.tulkur__wrapper}>
-        <p className={TT.tulkur__p}> Skoða verkefnalisti túlka   </p>
-        <p className={TT.tulkur__p}> sæki gögn.... </p>
-     </div>
+      <div className="card">
+        <div className="text-900 text-3xl font-medium mb-3">Sæki gögn...</div>
+      </div>
     )
   }
 
   if( APIData.length === 0){
      return (
-     <div className={TT.tulkur__wrapper}>
-        <p className={TT.tulkur__p}> Skoða verkefnalisti túlka   </p>
-        <p className={TT.tulkur__p}> Túlkur hefur ekki skráð í verkefni. </p>
-     </div>
+      <div className="card">
+          <div className="text-900 text-3xl font-medium mb-3">Enginn verkefni...</div>
+      </div>
     )
   }
 
   return (
-    <div className={TT.tulkur__wrapper}>
-      <p className={TT.tulkur__p}> Verkefnalisti túlka </p>
-
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th>Heiti</th>
-            <th>Staður</th>
-            <th>Dagur</th>
-            <th>Byrja</th>
-            <th>Endir</th>
-            <th>Vettvangur</th>
-            <th>Túlkur</th>
-          </tr>
-        </thead>
-        <tbody>
-
-        { APIData.map((data, i) => { 
-           return (
-              <tr key={i}>
-                <td> { data.heiti } </td>
-                <td> { data.stadur} </td>
-                <td> { data.dagur } </td>
-                <td> { data.byrja_timi } </td>
-                <td> { data.endir_timi } </td>
-                <td> { data.vettvangur } </td>
-                <td> { data.nafn } </td>
-              </tr>
-              )
-            })
-          }
-
-        </tbody>
-      </table>
-    </div>
-  )*/
-  return (
-    <div>
-      <p>verkefnalisti</p>
-    </div>
+    <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
+      <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
+        <div className="text-900 font-medium text-900 text-xl mb-3">Verkefnalisti</div>
+          <div className="surface-card p-3 shadow-2 border-round p-fluid">
+            <DataTable value={APIData} editMode="row" dataKey="id"  responsiveLayout="scroll">
+              <Column field="heiti" header="Heiti" style={{ width: '20%' }}></Column>
+              <Column field="stadur" header="Stadur" style={{ width: '20%' }}></Column>
+              <Column field="dagur" header="Dagur" style={{ width: '10%' }}></Column>
+              <Column field="byrja_timi" header="Byrja" style={{ width: '10%' }}></Column>
+              <Column field="endir_timi" header="Endir" style={{ width: '10%' }}></Column>
+              <Column field="vettvangur" header="Vettvangur" style={{ width: '15%' }}></Column>
+              <Column field="nameuser" header="Hver pantar" style={{ width: '15%' }}></Column>
+            </DataTable>
+          </div>
+        </div>
+      </div>
   )
 }
