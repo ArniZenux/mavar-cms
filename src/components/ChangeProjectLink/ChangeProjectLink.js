@@ -1,13 +1,13 @@
-import React, { useEffect, useState  } from 'react';
-import { Link } from 'react-router-dom';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Button } from 'primereact/button';
+import React from 'react';
+//, { useEffect, useState  } from 'react';
+//import { DataTable } from 'primereact/datatable';
+//import { Column } from 'primereact/column';
+//import { Button } from 'primereact/button';
 
-const apiUrl = process.env.REACT_APP_API_URL;
+//const apiUrl = process.env.REACT_APP_API_URL;
 
-export function ChangeProjectForm(id) {
-  const [loading, setLoading] = useState(false); 
+export function ChangeProjectLink() {
+ /* const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
   const [APIData, setAPIData] = useState([]);
 
@@ -42,7 +42,7 @@ export function ChangeProjectForm(id) {
      }
    
     fetchData(); 
-  }, [id]);
+  }, [id]);*/
  
 /*  const onRowEditComplete2 = async (e) => {
     let _APIData = [...APIData];
@@ -72,22 +72,7 @@ export function ChangeProjectForm(id) {
     }
   }*/
 
-  const changeFall = () => {
-    console.log("Breyta");
-  }
-
-  const renderButton1 = () => {
-    return (
-      <Link to={`/breyta`}>
-        <Button label="Breyta" className="p-button-Info" onClick={changeFall}/> 
-      </Link>
-    )
-  }
-  
-  
-  const button1 = renderButton1();
-
-  if(error){
+ /* if(error){
     return (
       <div className="card">
         <div className="text-900 text-3xl font-medium mb-3">Nær ekki samband við vefþjónustuna...</div>
@@ -110,9 +95,9 @@ export function ChangeProjectForm(id) {
       </div>
     )
   }
-
+*/
   return (
-    <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
+  /*  <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
       <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
         <div className="text-900 font-medium text-900 text-xl mb-3">Breyta verkefni</div>
           <div className="surface-card p-3 shadow-2 border-round p-fluid">
@@ -129,5 +114,9 @@ export function ChangeProjectForm(id) {
           </div>
         </div>
       </div>
+  */
+    <div className="card">
+      <div className="text-900 text-3xl font-medium mb-3">hallo...</div>
+    </div>
   )
 }

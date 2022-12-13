@@ -1,6 +1,7 @@
 import React, { useEffect, useState  } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -16,8 +17,8 @@ export function DeleteP(  { id }  ) {
       setError(null); 
 
       let json; 
-      const apiUrlId = apiUrl + '/project';
-      const url = new URL(id, apiUrlId); 
+      //const apiUrlId = apiUrl + '/project';
+      //const url = new URL(id, apiUrlId); 
 
       try {
         const result = await fetch(apiUrl + `/project`);
@@ -41,7 +42,7 @@ export function DeleteP(  { id }  ) {
      }
    
     fetchData(); 
-  }, [id]);
+  }, []);
  
 /*  const onRowEditComplete2 = async (e) => {
     let _APIData = [...APIData];
@@ -71,6 +72,18 @@ export function DeleteP(  { id }  ) {
     }
   }*/
 
+  const deleteFall = () => {
+    console.log("Eyða");
+  }
+
+  const renderButton1 = () => {
+    return (
+      <Button label="Eyða" className="p-button-danger" onClick={deleteFall}/>
+    )
+  }
+
+  const button1 = renderButton1();
+  
   if(error){
     return (
       <div className="card">
@@ -98,16 +111,17 @@ export function DeleteP(  { id }  ) {
   return (
     <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
       <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
-        <div className="text-900 font-medium text-900 text-xl mb-3">Verkefnalisti</div>
+        <div className="text-900 font-medium text-900 text-xl mb-3">Eyða verkefni</div>
           <div className="surface-card p-3 shadow-2 border-round p-fluid">
             <DataTable value={APIData} editMode="row" dataKey="id"  responsiveLayout="scroll">
-              <Column field="heiti" header="Heiti" style={{ width: '20%' }}></Column>
-              <Column field="stadur" header="Stadur" style={{ width: '20%' }}></Column>
+              <Column field="heiti" header="Heiti" style={{ width: '25%' }}></Column>
+              <Column field="stadur" header="Stadur" style={{ width: '10%' }}></Column>
               <Column field="dagur" header="Dagur" style={{ width: '10%' }}></Column>
               <Column field="byrja_timi" header="Byrja" style={{ width: '10%' }}></Column>
               <Column field="endir_timi" header="Endir" style={{ width: '10%' }}></Column>
-              <Column field="vettvangur" header="Vettvangur" style={{ width: '15%' }}></Column>
-              <Column field="nameuser" header="Hver pantar" style={{ width: '15%' }}></Column>
+              <Column field="vettvangur" header="Vettvangur" style={{ width: '10%' }}></Column>
+              <Column field="nameuser" header="Hver pantar" style={{ width: '10%' }}></Column>
+              <Column header="" body={button1} style={{ width: '5%' }}></Column>
             </DataTable>
           </div>
         </div>

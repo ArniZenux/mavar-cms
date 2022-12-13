@@ -21,8 +21,8 @@ export function Project(  { id }  ) {
       setError(null); 
 
       let json; 
-      const apiUrlId = apiUrl + '/project';
-      const url = new URL(id, apiUrlId); 
+      //const apiUrlId = apiUrl + '/project';
+      //const url = new URL(id, apiUrlId); 
 
       try {
         const result = await fetch(apiUrl + `/project`);
@@ -46,7 +46,7 @@ export function Project(  { id }  ) {
      }
    
     fetchData(); 
-  }, [id]);
+  }, []);
  
 /*  const onRowEditComplete2 = async (e) => {
     let _APIData = [...APIData];

@@ -5,9 +5,12 @@ import { Layout } from './components/Layout/Layout';
 import { Home } from './pages/home';
 import { Tulkur } from './pages/tulkur';
 import { AddInterpreter } from './pages/addInterpreter';
+import { InterpreterProjectList } from './pages/interpreterProjectList';
 import { ProjectList } from './pages/projectList';
 import { AddProject } from './pages/addproject';
 import { ChangeProject } from './pages/changeProject';
+import { ChangeProjectOne } from './pages/changeProjectLink';
+
 import { DeleteProject } from './pages/deleteProject';
 import { StadaProject } from './pages/stadaProject';
 
@@ -39,7 +42,7 @@ function App() {
     verifyUser();
   }, [verifyUser]);
 
-  return userContext.token ? (
+  return !userContext.token ? (
     <div>
        <BrowserRouter>
           <Routes>
@@ -56,6 +59,7 @@ function App() {
         <Layout>
           <Routes>
             <Route exact path="/" element={<Home />} />
+            <Route exact path="/tulkaverkefni" element={<InterpreterProjectList />} />
             <Route exact path="/tulkur" element={<Tulkur />} />
             <Route exact path="/nyrtulkur" element={<AddInterpreter />} />
 
@@ -64,6 +68,8 @@ function App() {
             <Route exact path="/breytaverkefni" element={<ChangeProject />} />
             <Route exact path="/eydaverkefni" element={<DeleteProject />} />
             <Route exact path="/stadaverkefni" element={<StadaProject />} />
+
+            <Route exact path="/breyta" element={<ChangeProjectOne />} />
             
             <Route path="*" element={<NotFound/> } />
           </Routes>
