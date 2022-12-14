@@ -14,6 +14,8 @@ import { ChangeProjectOne } from './pages/changeProjectLink';
 import { DeleteProject } from './pages/deleteProject';
 import { StadaProject } from './pages/stadaProject';
 
+import { WorkPlanT } from './pages/workPlan';
+
 import { NotFound } from './pages/404';
 
 import { Login } from './pages/login';
@@ -42,7 +44,7 @@ function App() {
     verifyUser();
   }, [verifyUser]);
 
-  return !userContext.token ? (
+  return userContext.token ? (
     <div>
        <BrowserRouter>
           <Routes>
@@ -68,7 +70,9 @@ function App() {
             <Route exact path="/breytaverkefni" element={<ChangeProject />} />
             <Route exact path="/eydaverkefni" element={<DeleteProject />} />
             <Route exact path="/stadaverkefni" element={<StadaProject />} />
-
+            
+            <Route exact path="/workplan" element={<WorkPlanT />} />
+            
             <Route exact path="/breyta" element={<ChangeProjectOne />} />
             
             <Route path="*" element={<NotFound/> } />
