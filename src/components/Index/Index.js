@@ -1,13 +1,73 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
+
+const apiUrl = process.env.REACT_APP_API_URL;
 
 export function Index() {
-  const [loading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [beidniData, setBeidniData] = useState([]);
+  
+  useEffect(() => {
+    async function fetchBeidniData(){
+      setLoading(true); 
+      setError(null); 
+      let json; 
+      
+      try {
+        const result = await fetch(apiUrl + `/beidni/byBeidni`);
+   
+        if(!result.ok){
+          throw new Error('Ekki ok');
+        }
+        json = await result.json();
+      }
+      catch(e){
+        console.warn('unable to fetch data', e); 
+        setError('Gat ekki sótt efni í vefþjónustu - Bilað í þjónustuna.');
+        return; 
+      }
+      finally{
+        setLoading(false); 
+      }
+      setBeidniData(json);
+     }
+   fetchBeidniData(); 
+  },[]);
+
+  const changeFall = () => {
+    console.log("Breyta");
+  }
+
+  const renderButton1 = () => {
+    return (
+      <Link to={`/breyta`}>
+        <Button label="Bóka" className="p-button-Info" onClick={changeFall}/> 
+      </Link>
+    )
+  }
+  
+  const button1 = renderButton1();
+
+  if(error){
+   return (
+      <div className="surface-card shadow-2 border-round p-4">
+        <div className="flex justify-content-between align-items-center mb-5">
+          <span className="text-xl text-900 font-medium">Vefþjónusta biluð</span>
+        </div>
+            <span className="text-xl text-900 font-medium"> Nær ekki samband í þjónustu - Eitthvað klikkar! </span>
+      </div>
+   )
+  }
 
   if(loading){
     return(
       <div className="surface-card shadow-2 border-round p-4">
         <div className="flex justify-content-between align-items-center mb-5">
-          <span className="text-xl text-900 font-medium">Beiðni sem þú óskar eftir túlk</span>
+          <span className="text-xl text-900 font-medium">Nýbeiðni um táknmálstúlk</span>
         </div>
             <span className="text-xl text-900 font-medium">Engin beiðni ennþá skráð. </span>
       </div>
@@ -15,7 +75,25 @@ export function Index() {
   }
 
   return (
+    <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
+    <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
+      <div className="text-900 font-medium text-900 text-xl mb-3">Nýbeiðni um táknmálstúlk</div>
+        <div className="surface-card p-3 shadow-2 border-round p-fluid">
+          <DataTable value={beidniData} editMode="row" dataKey="id"  responsiveLayout="scroll">
+            <Column field="lysing" header="Heiti" style={{ width: '25%' }}></Column>
+            <Column field="stadur" header="Stadur" style={{ width: '10%' }}></Column>
+            <Column field="dagur" header="Dagur" style={{ width: '10%' }}></Column>
+            <Column field="byrja_timi" header="Byrja" style={{ width: '10%' }}></Column>
+            <Column field="endir_timi" header="Endir" style={{ width: '10%' }}></Column>
+            <Column field="nameuser" header="Hver pantar" style={{ width: '10%' }}></Column>
+            <Column header="" body={button1} style={{ width: '10%' }}></Column>
+          </DataTable>
+        </div>
+      </div>
+    </div>
+  )
 
+  /* return (
     <div className="surface-card shadow-2 border-round p-4">
       <div className="flex mb-5">
         <span className="text-xl text-900 font-medium">Beiðni sem um eftir túlk</span>
@@ -68,5 +146,5 @@ export function Index() {
        </ul>
     </div>
     
-  );
+  );*/
 }
