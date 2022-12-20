@@ -116,7 +116,7 @@ export function ChangeProjectLink() {
       </div>
   */
     <div className="card">
-      <div className="text-900 text-3xl font-medium mb-3">hallo...</div>
+      <div className="text-900 text-3xl font-medium mb-3">Breyta verkefni</div>
     </div>
   )
 }
