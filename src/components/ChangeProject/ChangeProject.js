@@ -17,7 +17,7 @@ const apiUrl = process.env.REACT_APP_API_URL;
 export function ChangeProjectForm(id) {
   let emptyProduct = {
     id: '',
-    heiti: 'prófa',
+    heiti: '',
     stadur: '',
     dagur: '',
     byrja_timi: '',
@@ -45,7 +45,6 @@ export function ChangeProjectForm(id) {
   const [productDialog, setProductDialog] = useState(false);
   const [deleteProductDialog, setDeleteProductDialog] = useState(false);
   //const [submitted, setSubmitted] = useState(false);
-  const [product, setProduct] = useState(emptyProduct);
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
   let [day, setDay] = useState(new Date());
@@ -57,7 +56,8 @@ export function ChangeProjectForm(id) {
   const df = useRef(null);
   
   const [APIData, setAPIData] = useState([]);
-
+  const [product, setProduct] = useState(emptyProduct);
+  
   useEffect(() => {
       async function fetchData(){
       setLoading(true); 
@@ -157,38 +157,51 @@ export function ChangeProjectForm(id) {
     return errors;
   };
 
-  const hideDialog = () => {
-    //setSubmitted(false);
-    setProductDialog(false);
-    toast.current.show({ severity: 'success', summary: 'Það tókst', detail: 'Verkefni er eydd', life: 3000 });
-  }
-  
-  const editProduct = () => {
-    //setProduct({...product});
+  //------------------
+
+  const editProduct = (product) => {
+    setProduct(product);
     setProductDialog(true);
   }
 
-  const confirmDeleteProduct = () => {
-    //setProduct(product);
+  const confirmDeleteProduct = (product) => {
+    setProduct(product);
     setDeleteProductDialog(true);
   }
 
-  const renderButton1 = () => {
+  const renderButton1 = (rowData) => {
     return (
       <React.Fragment>
-        <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editProduct()} />
-        <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteProduct()} />
+        <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editProduct(rowData)} />
+        <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteProduct(rowData)} />
       </React.Fragment>
     )
   }
+
+  //------------------
+
+  const hideProductDialog = () => {
+    //setSubmitted(false);
+    setProductDialog(false);
+  }
   
+  const changeProduct = () => {
+    // let _products = products.filter(val => val.id !== product.id);
+    // setProducts(_products);
+    setProductDialog(false);
+    // setProduct(emptyProduct);
+    toast.current.show({ severity: 'success', summary: 'Það tókst', detail: 'Verkefni er breytt', life: 3000 });
+   }
+
   const productDialogFooter = (
     <React.Fragment>
-        <Button label="Hætta við" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-        <Button label="Breyta" icon="pi pi-check" className="p-button-text" />
+        <Button label="Hætta við" icon="pi pi-times" className="p-button-text" onClick={hideProductDialog} />
+        <Button label="Breyta" icon="pi pi-check" className="p-button-text" onClick={changeProduct} />
     </React.Fragment>
   );
 
+  //------------------
+  
   const hideDeleteProductDialog = () => {
     setDeleteProductDialog(false);
   }
@@ -263,8 +276,8 @@ export function ChangeProjectForm(id) {
           </div>
         </div>
 
-        <Dialog visible={productDialog} style={{ width: '1000px', height:'650px' }} header="Breyta verkefnalýsing" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-        <Form onSubmit={onSubmit} initialValues={{ lysing: '', hver: '', stadur: '', dropdown: '', dropdown2: '', dagtal: '', start: '', last: ''}} validate={validate} render={({ handleSubmit }) => (
+        <Dialog visible={productDialog} style={{ width: '1000px', height:'610px' }} header="Breyta verkefnalýsing" modal className="p-fluid" footer={productDialogFooter} onHide={hideProductDialog}>
+        <Form onSubmit={onSubmit} initialValues={{ heiti: '', hver: '', stadur: '', dropdown: '', dropdown2: '', dagtal: '', start: '', last: ''}} validate={validate} render={({ handleSubmit }) => (
               <form onSubmit={handleSubmit} className="p-fluid">
                 <div className="grid formgrid">
                   <div className="field mb-4 col-12 md:col-6">
@@ -272,8 +285,9 @@ export function ChangeProjectForm(id) {
                     <Field name="lysing" render={({ input, meta }) => (
                       <div className="field mt-4 col-12 md:col-12">
                         <span className="p-float-label">
-                          <InputTextarea id="lysing" autoResize rows={3} {...input} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
-                          <label htmlFor="lysing" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Lýsing*</label>
+                        
+                          <InputTextarea id="heiti" value={product.heiti} autoResize rows={3} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                          <label htmlFor="heiti" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Lýsing*</label>
                         </span>
                         {getFormErrorMessage(meta)}
                       </div>
@@ -282,7 +296,7 @@ export function ChangeProjectForm(id) {
                     <Field name="hver" render={({ input, meta }) => (
                       <div className="field mt-5 col-12 md:col-12">
                         <span className="p-float-label">
-                          <InputText id="hver" {...input} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                          <InputText id="hver" value={product.nameuser} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
                           <label htmlFor="hver" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Hver pantar*</label>
                         </span>
                         {getFormErrorMessage(meta)}
@@ -292,7 +306,7 @@ export function ChangeProjectForm(id) {
                     <Field name="stadur" render={({ input, meta }) => (
                       <div className="field mt-5 col-12 md:col-12">
                         <span className="p-float-label">
-                          <InputText id="stadur" {...input} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                          <InputText id="stadur" value={product.stadur} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
                           <label htmlFor="stadur" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Hvar er staður*</label>
                         </span>
                         {getFormErrorMessage(meta)}
@@ -302,7 +316,7 @@ export function ChangeProjectForm(id) {
                     <Field name="dropdown" render={({ input, meta }) => (
                       <div className="field mt-5 col-12 md:col-12">
                         <span className="p-float-label">
-                          <Dropdown inputId="dropdown" {...input} options={vettvangalist} optionLabel="name" className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                          <Dropdown inputId="dropdown" value={product.vettvangur} options={vettvangalist} optionLabel="name" className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
                           <label htmlFor="dropdown" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Vettvangur*</label>
                         </span>
                         {getFormErrorMessage(meta)}
@@ -312,7 +326,7 @@ export function ChangeProjectForm(id) {
                     <Field name="dropdown2" render={({ input, meta }) => (
                       <div className="field mt-5 col-12 md:col-12">
                         <span className="p-float-label">
-                          <Dropdown inputId="dropdown2" {...input} options={tulkaJson} optionLabel="name" className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                          <Dropdown inputId="dropdown2" options={tulkaJson} optionLabel="name" className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
                           <label htmlFor="dropdown2" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Túlkur*</label>
                         </span>
                         {getFormErrorMessage(meta)}
@@ -327,7 +341,7 @@ export function ChangeProjectForm(id) {
                         <span className="p-float-label">
                           <Calendar 
                             id="dagtal"
-                            value={day}  
+                            value={day}
                             onChange={(e) => setDay(e.value)}
                             dateFormat="dd/mm/yy" 
                             mask="99/99/9999"
@@ -378,15 +392,14 @@ export function ChangeProjectForm(id) {
                 
                   </div>
                 </div>
-              <Button type="submit" label="Skrá verkefni" icon="pi pi-pencil" className="w-auto ml-2" />
-              </form>
-            )} />
+             </form>
+          )} />
         </Dialog>
 
         <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Staðfest að eyða" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
           <div className="confirmation-content">
               <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem'}} />
-              {APIData && <span>Staðfest að eyða þetta verkefni?<b>{product.heiti}</b>?</span>}
+              {product && <span>Staðfest að eyða verkefni <b>{ product.heiti}</b> ?</span>}
           </div>
         </Dialog>
       </div>
