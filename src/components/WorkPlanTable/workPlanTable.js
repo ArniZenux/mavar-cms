@@ -1,7 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import { ListBox } from 'primereact/listbox';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+
+//import FullCalendar from '@fullcalendar/react';
+//import dayGridPlugin from '@fullcalendar/daygrid';
 //import "@fullcalendar/core/main.css";
 //import "@fullcalendar/daygrid/main.css";
 //import "@fullcalendar/timegrid/main.css";
@@ -19,7 +22,7 @@ export function WorkPlanTable() {
   const [error, setError] = useState(null);
   const [tulkurData, setTulkurData] = useState([]);
   const [selectedInterpreter, setSelectedInterpreter] = useState('');
-  const [verkefniData, setVerkefniData] = useState(events); 
+  let   [verkefniData, setVerkefniData] = useState(events); 
   
   useEffect(() => {
     //initEvents();
@@ -36,16 +39,12 @@ export function WorkPlanTable() {
           const result = await fetch(apiUrl + `/tulkur`); 
           const result2 = await fetch(apiUrl + `/project/events`); 
 
-          //console.log(result);
-          //console.log(result2);
-
           if(!result.ok){
             throw new Error('Ekki ok');
           }
           json = await result.json();
           json2 = await result2.json();
 
-          //console.log(json2);
         }
         catch(e){
           console.warn('unable to fetch data', e); 
@@ -56,25 +55,33 @@ export function WorkPlanTable() {
           setLoading(false); 
         }
         setTulkurData(json); 
-        setVerkefniData(json2); 
+        setVerkefniData(events); 
        }
      
       fetchData();
   }, []);
 
-  const handleListBox = (e) => {
-    let _tulkurData = [...tulkurData];
-    let { id, nafn } = e;
-    _tulkurData[id] = nafn;
-    //console.log(_tulkurData);
-
-    setSelectedInterpreter(e.value);
-    console.log(selectedInterpreter);
+  if(selectedInterpreter.id === 1){
+    events = [
+        {   
+          title: 'Bauhaus (Eyrún) - stöðufundur', 
+          start_event: '22 demeber 2022',
+          end_event: '23 desmeber 2022'
+        },
+        {   
+          title: 'Fundur með Rósu', 
+          start_event: 'December 12, 2022 11:00:00' 
+        },
+        {   
+          title: 'Túlkur í ÖBI - um vinnumarkað', 
+          start_event: 'December 18, 2022 11:00:00', 
+          end_event: 'December 18, 2022 15:00:00' 
+        }
+      ]
+      console.log("nr 1");
+      setVerkefniData(events); 
+    }
     
-    setVerkefniData(events); 
-
-  }
-  
   if(error){
     return (
       <div className="card">
@@ -109,18 +116,17 @@ export function WorkPlanTable() {
                 <ListBox className="mt-7" 
                   value={selectedInterpreter} 
                   options={tulkurData} 
-                  onChange={handleListBox}
+                  onChange={(e) => setSelectedInterpreter(e.value)}
                   optionLabel="nafn" 
                 />
               </div>
               <div className="field mb-4 col-12 md:col-10">
                 <p> Hérna er tilraun </p>
-                <ul>
-                  { verkefniData.map((data) => {
-                    <li key={data.id}>asdf{data.title}</li>
-                    })
-                  }
-                </ul>
+                <DataTable value={verkefniData} editMode="row" dataKey="id" responsiveLayout="scroll"> 
+                  <Column field="title" header="Title" style={{ width: '25%' }}></Column>
+                  <Column field="start_event" header="Start" style={{ width: '10%' }}></Column>
+                  <Column field="end_event" header="End" style={{ width: '10%' }}></Column>
+                </DataTable>         
               </div>
           </div>
         </div>
