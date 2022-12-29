@@ -15,7 +15,7 @@ import { classNames } from 'primereact/utils';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function ChangeProjectForm(id) {
-  let emptyProduct = {
+  let emptyProduct = [{
     id: '',
     heiti: '',
     stadur: '',
@@ -24,7 +24,7 @@ export function ChangeProjectForm(id) {
     endir_timi: '',
     vettvangur: '',
     nameuser: ''
-  };
+  }];
 
   const vettvangalist = [
     { name: 'Almennt'},
@@ -47,9 +47,15 @@ export function ChangeProjectForm(id) {
   //const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
+
+  let [dagur, setDagur] = useState('');           // system 
   let [day, setDay] = useState(new Date());
-  let [start, setStart] = useState("00:00");
-  let [last, setLast] = useState("00:00");
+  let [viewDate, setViewDate] = useState(new Date());
+  
+  let [byrja_timi, setByrjaTimi] = useState('');
+  let [endir_timi, setEndirTimi] = useState('');
+  //let [vettvangur, setVettvangur] = useState('');
+    
   const [showMessage, setShowMessage] = useState(false);
   const [formData, setFormData] = useState({});
   const toast = useRef(null); 
@@ -86,7 +92,8 @@ export function ChangeProjectForm(id) {
         setLoading(false); 
       }
       setAPIData(json);
-     }
+      setProduct(json);
+    }
    
     fetchData(); 
   }, [id]);
@@ -157,10 +164,78 @@ export function ChangeProjectForm(id) {
     return errors;
   };
 
+  let year = '';
+  let month = '';
+  let dayy = '';
+  
+  function dagurSplit(){
+    let split = dagur.split('.');
+    year = split[2];
+    month = split[1];
+    dayy = split[0];
+
+    if(typeof month === 'undefined' || typeof year === 'undefined' || typeof dayy === 'undefined'){
+      console.log("-- undefined --");
+    } 
+    else{
+      /* eslint eqeqeq: 0 */
+      if(month == 1){
+        month = 0;
+      }
+      if(month == 2){
+        month = 1;
+      } 
+      if(month == 3){
+        month = 2;
+      }
+      if(month == 4){
+        month = 3;
+      }
+      if(month == 5){
+        month = 4;
+      }
+      if(month == 6){
+        month = 5;
+      }
+      if(month == 7){
+        month = 6;
+      }
+      if(month == 8){
+        month = 7;
+      }
+      if(month == 9){
+        month = 8;
+      }
+      if(month == 10){
+        month = 9;
+      }
+      if(month == 11){
+        month = 10;
+      }
+      if(month == 12){
+        month = 11;
+      }
+      
+      viewDate.setFullYear(year,month,dayy);
+      console.log(viewDate); 
+      setViewDate(viewDate); 
+    } 
+  }
+  
   //------------------
 
   const editProduct = (product) => {
     setProduct(product);
+    console.log(product); 
+    //setByrjaTimi(product.byrja_timi); 
+    setDagur('December 22, 2022 11:00:00');
+    setDay('December 22, 2022 11:00:00');
+    setViewDate('December 22, 2022 11:00:00'); 
+
+    //dagurSplit();
+    console.log(day);
+    console.log(dagur); 
+    console.log(viewDate); 
     setProductDialog(true);
   }
 
@@ -211,7 +286,7 @@ export function ChangeProjectForm(id) {
    // setProducts(_products);
    setDeleteProductDialog(false);
    // setProduct(emptyProduct);
-   toast.current.show({ severity: 'success', summary: 'Það tókst', detail: 'Verkefni er eydd', life: 3000 });
+   toast.current.show({ severity: 'info', summary: 'Það tókst', detail: 'Verkefni er eydd', life: 3000 });
   }
 
   const deleteProductDialogFooter = (
@@ -260,7 +335,7 @@ export function ChangeProjectForm(id) {
   return (
     <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
       <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
-        <div className="text-900 font-medium text-900 text-xl mb-3">Eyða verkefni</div>
+        <div className="text-900 font-medium text-900 text-xl mb-3">Breyta verkefni ???.....</div>
           <div className="surface-card p-3 shadow-2 border-round p-fluid">
           <Toast ref={toast} />
             <DataTable ref={df} value={APIData} editMode="row" dataKey="id" responsiveLayout="scroll"> 
@@ -276,18 +351,17 @@ export function ChangeProjectForm(id) {
           </div>
         </div>
 
-        <Dialog visible={productDialog} style={{ width: '1000px', height:'610px' }} header="Breyta verkefnalýsing" modal className="p-fluid" footer={productDialogFooter} onHide={hideProductDialog}>
-        <Form onSubmit={onSubmit} initialValues={{ heiti: '', hver: '', stadur: '', dropdown: '', dropdown2: '', dagtal: '', start: '', last: ''}} validate={validate} render={({ handleSubmit }) => (
+        <Dialog visible={productDialog} style={{ width: '1000px', height:'790px' }} header="Breyta verkefnalýsing" modal className="p-fluid" footer={productDialogFooter} onHide={hideProductDialog}>
+        <Form onSubmit={onSubmit} initialValues={{ heiti: '', hver: '', stadur: '', dropdown: '', dropdown2: '', day: '', start: '', last: ''}} validate={validate} render={({ handleSubmit }) => (
               <form onSubmit={handleSubmit} className="p-fluid">
                 <div className="grid formgrid">
                   <div className="field mb-4 col-12 md:col-6">
 
                     <Field name="lysing" render={({ input, meta }) => (
                       <div className="field mt-4 col-12 md:col-12">
-                        <span className="p-float-label">
-                        
-                          <InputTextarea id="heiti" value={product.heiti} autoResize rows={3} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                        <span className="label">
                           <label htmlFor="heiti" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Lýsing*</label>
+                          <InputTextarea id="heiti" value={product.heiti} autoResize rows={3} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
                         </span>
                         {getFormErrorMessage(meta)}
                       </div>
@@ -295,9 +369,9 @@ export function ChangeProjectForm(id) {
                     
                     <Field name="hver" render={({ input, meta }) => (
                       <div className="field mt-5 col-12 md:col-12">
-                        <span className="p-float-label">
-                          <InputText id="hver" value={product.nameuser} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                        <span className="label">
                           <label htmlFor="hver" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Hver pantar*</label>
+                          <InputText id="hver" value={product.nameuser} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
                         </span>
                         {getFormErrorMessage(meta)}
                       </div>
@@ -305,9 +379,9 @@ export function ChangeProjectForm(id) {
                     
                     <Field name="stadur" render={({ input, meta }) => (
                       <div className="field mt-5 col-12 md:col-12">
-                        <span className="p-float-label">
-                          <InputText id="stadur" value={product.stadur} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                        <span className="p-label">
                           <label htmlFor="stadur" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Hvar er staður*</label>
+                          <InputText id="stadur" value={product.stadur} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
                         </span>
                         {getFormErrorMessage(meta)}
                       </div>
@@ -315,9 +389,18 @@ export function ChangeProjectForm(id) {
                     
                     <Field name="dropdown" render={({ input, meta }) => (
                       <div className="field mt-5 col-12 md:col-12">
-                        <span className="p-float-label">
-                          <Dropdown inputId="dropdown" value={product.vettvangur} options={vettvangalist} optionLabel="name" className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
-                          <label htmlFor="dropdown" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Vettvangur*</label>
+                        <span className="p-label">
+                        <label htmlFor="dropdown" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Vettvangur*</label>
+                          <Dropdown 
+                            inputId="dropdown" 
+                            value={product.vettvangur} 
+                            valueTemplate={product.vettvangur}
+                            placeholder={product.vettvangur}
+                            options={vettvangalist} 
+                            optionLabel="name" 
+                            className={classNames({ 'p-invalid': isFormFieldValid(meta) })} 
+                          />
+                         
                         </span>
                         {getFormErrorMessage(meta)}
                       </div>
@@ -325,9 +408,16 @@ export function ChangeProjectForm(id) {
 
                     <Field name="dropdown2" render={({ input, meta }) => (
                       <div className="field mt-5 col-12 md:col-12">
-                        <span className="p-float-label">
-                          <Dropdown inputId="dropdown2" options={tulkaJson} optionLabel="name" className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                        <span className="p-label">
                           <label htmlFor="dropdown2" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Túlkur*</label>
+                          <Dropdown 
+                            inputId="dropdown2" 
+                            valueTemplate={product.tulkur}
+                            placeholder={product.tulkur}
+                            options={tulkaJson} 
+                            optionLabel="name" 
+                            className={classNames({ 'p-invalid': isFormFieldValid(meta) })} 
+                          />
                         </span>
                         {getFormErrorMessage(meta)}
                       </div>
@@ -343,48 +433,48 @@ export function ChangeProjectForm(id) {
                             id="dagtal"
                             value={day}
                             onChange={(e) => setDay(e.value)}
+                            viewDate={viewDate} 
+                            onViewDateChange={(e) => setViewDate(e.value)}
                             dateFormat="dd/mm/yy" 
-                            mask="99/99/9999"
-                            showIcon 
+                            inline
                             {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}
                           />
-                          <label htmlFor="dagtal" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Dagtal*</label>
                         </span>    
                         {getFormErrorMessage(meta)}
                       </div>
                     )} />
-
-                    <Field name="start" render={({ input, meta }) => (
+                    
+                    <Field name="byrja_timi" render={({ input, meta }) => (
                       <div className="field mt-5 col-12 md:col-12">
-                        <span className="p-float-label">
+                        <span className="p-label">
+                        <label htmlFor="byrja_timi" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Klukka byrja*</label>
                           <Calendar 
-                            id="start" 
-                            value={start} 
-                            onChange={(e) => setStart(e.value)} 
-                            mask="99:99"
-                            timeOnly 
-                            hourFormat="24" 
-                            {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}
-                          />
-                        <label htmlFor="start" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Klukka byrja*</label>
-                        </span>
-                        {getFormErrorMessage(meta)}
-                      </div>
-                    )} />
-                  
-                    <Field name="last" render={({ input, meta }) => (
-                      <div className="field mt-5 col-12 md:col-12">
-                        <span className="p-float-label">
-                          <Calendar 
-                            id="last" 
-                            value={last} 
-                            onChange={(e) => setLast(e.value)} 
-                            mask=""
+                            id="byrja_timi" 
+                            value={byrja_timi} 
+                            placeholder={product.byrja_timi}
+                            onChange={(e) => setByrjaTimi(e.value)} 
                             timeOnly
                             hourFormat="24" 
                             {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}
                           />
-                          <label htmlFor="last" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Klukka endir*</label>
+                        </span>
+                        {getFormErrorMessage(meta)}
+                      </div>
+                    )} />
+
+                    <Field name="last" render={({ input, meta }) => (
+                      <div className="field mt-5 col-12 md:col-12">
+                        <span className="p-label">
+                        <label htmlFor="last" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Klukka endir*</label>
+                          <Calendar 
+                            id="endir_timi" 
+                            value={endir_timi}
+                            placeholder={product.endir_timi} 
+                            onChange={(e) => setEndirTimi(e.value)} 
+                            timeOnly
+                            hourFormat="24" 
+                            {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}
+                          />
                         </span>
                         {getFormErrorMessage(meta)}
                       </div>
