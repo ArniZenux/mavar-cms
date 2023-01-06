@@ -159,12 +159,68 @@ let interpreters = [ { nafn: '', id: 0 }];
 }*/
 
 
-// a custom render function
-function renderEventContent(eventInfo) {
-  return (
-    <>
-      <b>{eventInfo.timeText}</b>
-      <i>{eventInfo.event.title}</i>
-    </>
-  )
-}
+
+
+
+/*<FullCalendar
+    defaultView="dayGridMonth"
+    locale={"is-IS"}
+    plugins={[dayGridPlugin]}
+    initialView='dayGridMonth'
+    weekends={true}
+    events={events}
+    eventContent={renderEventContent}
+  />
+  
+   <Dropdown 
+                  value={selectedInterpreter} 
+                  options={tulkurData2} 
+                  onChange={skodaTulkur} 
+                  optionLabel="nafn" 
+                  placeholder="Veldu túlk" />
+              
+  
+    
+  */
+ /*
+        eventsList = [{
+          title: 'Bauhaus - stöðufundur', 
+          start: new Date('January 2, 2023 10:00:00'),
+          end: new Date('January 2, 2023 12:00:00')
+        }]*/
+        /*eventsList =  {
+          title : 'Hello',
+          start: new Date('January 12, 2023 10:00:00'),
+          end: new Date('January 12, 2023 14:00:00')
+        }*/
+
+        /*
+let event = [
+  { title: 'event 1', date: '2023-01-06' },
+  { title: 'event 2', date: '2023-01-07' }
+]
+
+let events = [{
+  title: 'Bauhaus - stöðufundur', 
+  start: new Date('January 2, 2023 10:00:00'),
+  end: new Date('January 2, 2023 12:00:00')
+}]*/
+
+
+ // að ná úr api  server  - einfalt halló.       100%
+    // að ná úr api  server  - list af tblEventTable. 100% 
+    // að ná úr api  server  - list af tblEventTable og setja í DataTable. 100% 
+    // að ná úr api  server  - list af tblEventTable eftir einni túlki og setja í DataTable. 100% 
+    // að ná úr api  server  - list af tblEventTable eftir túlki og setja í DataTable. Án þess undefined birtar 100% 
+
+
+    /*
+<DataTable value={verkefniData} editMode="row" dataKey="id" responsiveLayout="scroll"> 
+                  <Column field="title" header="Title" style={{ width: '25%' }}></Column>
+                  <Column field="start_event" header="Start" style={{ width: '10%' }}></Column>
+                  <Column field="end_event" header="End" style={{ width: '10%' }}></Column>
+                </DataTable>         
+ */
+
+
+                //  https://github.com/beggubo/fullCalendarAPP/blob/main/src/helpers/funciones.js
