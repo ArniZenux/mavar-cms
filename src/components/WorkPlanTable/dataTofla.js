@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
+import { Dialog } from 'primereact/dialog';
+import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
 
 //import "@fullcalendar/core/main.css";
 //import "@fullcalendar/daygrid/main.css";
@@ -19,6 +21,10 @@ let eventsList = [{
 
 export function DataTofla( {id} ) {
   const [verkefniData, setVerkefniData] = useState(eventsList); 
+  const [productDialog, setProductDialog] = useState(false);
+  let [ zselectInfo, setSelectInfo] = useState('');
+  let [title , setTitle] = useState('');
+
   useEffect(() => {
 
     async function fetchTulkurData(){
@@ -35,7 +41,7 @@ export function DataTofla( {id} ) {
         }
           
         json2 = await verkefni_result.json();
-
+        
         let heiti = json2[0].title;
         let byrjar = json2[0].start_event;
         let endir = json2[0].end_event;
@@ -55,23 +61,66 @@ export function DataTofla( {id} ) {
   fetchTulkurData();
 
   },[id]);
-  
+
+  const hideProductDialog = () => {
+    setProductDialog(false);
+  }
+
+  let selectGlobal = '';
+
+  const addProduct = () => {
+    let calendarApi = zselectInfo.view.calendar
+    if(title){
+      calendarApi.addEvent({ // will render immediately. will call handleEventAdd
+        title,
+        start: zselectInfo.startStr,
+        end: zselectInfo.endStr,
+        allDay: zselectInfo.allDay
+      }, true) // temporary=true, will get overwritten when reducer gives new events
+    }
+    setProductDialog(false);
+    setTitle('');
+  }
+
+  const productDialogFooter = (
+    <React.Fragment>
+        <Button label="Nei" icon="pi pi-times" className="p-button-text" onClick={hideProductDialog} />
+        <Button label="Já" icon="pi pi-check" className="p-button-text" onClick={addProduct} />
+    </React.Fragment>
+  );
+
+  function handleDateSelect(selectInfo){
+    setProductDialog(true);
+    setSelectInfo(selectInfo);
+  }
+
   return (
     <div>
       <div className="card">
         <div className="text-center">
           <FullCalendar
-            plugins={[ dayGridPlugin ]}
+            plugins={[ dayGridPlugin, interactionPlugin ]}
             initialView="dayGridMonth"
+            editable={true}
+            selectable={true}
+            selectMirror={true}
+            dayMaxEvents={true}
             events={eventsList}
+            select={handleDateSelect}
           />
-          <DataTable value={verkefniData} editMode="row" dataKey="id" responsiveLayout="scroll"> 
-            <Column field="title" header="Title" style={{ width: '10%' }}></Column>
-            <Column field="start_event" header="Start" style={{ width: '10%' }}></Column>
-            <Column field="end_event" header="End" style={{ width: '10%' }}></Column>
-          </DataTable> 
         </div>
       </div>
+
+      <Dialog visible={productDialog} style={{ width: '450px' }} header="Staðfest að bæta verkefni" modal footer={productDialogFooter} onHide={hideProductDialog}>
+        <div className="confirmation-content">
+          <br/>
+          <InputText id="stadur" value={title} onChange={(e) => setTitle(e.target.value)} /><br/>
+          <span>Staðfest að skrá verkefni</span> 
+        </div>
+      </Dialog>
+
     </div>
-  );
+
+  )
 }
+
