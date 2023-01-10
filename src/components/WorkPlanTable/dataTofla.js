@@ -5,6 +5,7 @@ import { InputText } from 'primereact/inputtext';
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction';
 
 //import "@fullcalendar/core/main.css";
@@ -24,6 +25,7 @@ export function DataTofla( {id} ) {
   const [productDialog, setProductDialog] = useState(false);
   let [ zselectInfo, setSelectInfo] = useState('');
   let [title , setTitle] = useState('');
+  let [stadur , setStadur] = useState('');
 
   useEffect(() => {
 
@@ -66,8 +68,6 @@ export function DataTofla( {id} ) {
     setProductDialog(false);
   }
 
-  let selectGlobal = '';
-
   const addProduct = () => {
     let calendarApi = zselectInfo.view.calendar
     if(title){
@@ -75,17 +75,20 @@ export function DataTofla( {id} ) {
         title,
         start: zselectInfo.startStr,
         end: zselectInfo.endStr,
-        allDay: zselectInfo.allDay
+        allDay: zselectInfo.allDay,
+        color: '#924ACE'
       }, true) // temporary=true, will get overwritten when reducer gives new events
     }
     setProductDialog(false);
     setTitle('');
+    setStadur('');
+    console.log(verkefniData);
   }
 
   const productDialogFooter = (
     <React.Fragment>
-        <Button label="Nei" icon="pi pi-times" className="p-button-text" onClick={hideProductDialog} />
-        <Button label="Já" icon="pi pi-check" className="p-button-text" onClick={addProduct} />
+        <Button label="Hætta" icon="pi pi-times" className="p-button-text" onClick={hideProductDialog} />
+        <Button label="Skrá" icon="pi pi-check" className="p-button-text" onClick={addProduct} />
     </React.Fragment>
   );
 
@@ -99,7 +102,12 @@ export function DataTofla( {id} ) {
       <div className="card">
         <div className="text-center">
           <FullCalendar
-            plugins={[ dayGridPlugin, interactionPlugin ]}
+            plugins={[ dayGridPlugin, timeGridPlugin, interactionPlugin ]}
+            headerToolbar={{
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            }}
             initialView="dayGridMonth"
             editable={true}
             selectable={true}
@@ -111,16 +119,26 @@ export function DataTofla( {id} ) {
         </div>
       </div>
 
-      <Dialog visible={productDialog} style={{ width: '450px' }} header="Staðfest að bæta verkefni" modal footer={productDialogFooter} onHide={hideProductDialog}>
-        <div className="confirmation-content">
-          <br/>
-          <InputText id="stadur" value={title} onChange={(e) => setTitle(e.target.value)} /><br/>
-          <span>Staðfest að skrá verkefni</span> 
-        </div>
+      <Dialog visible={productDialog} style={{ width: '400px' }} header="Skrá nýtt verkefni" modal footer={productDialogFooter} onHide={hideProductDialog}>
+        <div className="grid formgrid">
+          <div className="field mb-2 col-2">
+            <div className="field mt-2 col-12">
+              <label>Lýsing</label>
+            </div>
+            <div className="field mt-4 col-12">
+              <label>Staður</label>
+            </div>
+          </div>
+          <div className="field mb-0 col-4">
+            <div className="field col-12">
+              <InputText id="lysing" value={title} onChange={(e) => setTitle(e.target.value)} />
+            </div>
+            <div className="field col-12">
+              <InputText id="stadur" value={stadur} onChange={(e) => setStadur(e.target.value)} />
+            </div>
+          </div>
+        </div>   
       </Dialog>
-
     </div>
-
   )
 }
-

@@ -44,7 +44,7 @@ export function Index() {
 
   const renderButton1 = () => {
     return (
-      <Link to={`/breyta`}>
+      <Link to={`/bokabeidni`}>
         <Button label="Bóka" className="p-button-Info" onClick={changeFall}/> 
       </Link>
     )

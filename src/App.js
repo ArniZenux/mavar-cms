@@ -73,7 +73,7 @@ function App() {
             
             <Route exact path="/workplan" element={<WorkPlanT />} />
             
-            <Route exact path="/breyta" element={<ChangeProjectOne />} />
+            <Route exact path="/bokabeidni" element={<ChangeProjectOne />} />
             
             <Route path="*" element={<NotFound/> } />
           </Routes>
