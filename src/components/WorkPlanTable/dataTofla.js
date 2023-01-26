@@ -16,12 +16,14 @@ import interactionPlugin from '@fullcalendar/interaction';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 let eventsList = {
+  idverkefni: '',
   title: '',
   start_event: '',
   end_event: '',
   allDay: ''
 };
 
+let counterEvents = 0; 
 let EventLists = [];
 
 export function DataTofla( {id} ) {
@@ -42,6 +44,7 @@ export function DataTofla( {id} ) {
       let json2;
 
       EventLists = [];
+      counterEvents = 1;
 
       try{
         const apiUrlId = apiUrl + '/project/events/';
@@ -54,14 +57,16 @@ export function DataTofla( {id} ) {
         }
           
         json2 = await verkefni_result.json();
-        
+
         json2.forEach(data => {
+          let idx = counterEvents++; 
           let heiti = data.title;
           let byrjar = data.start_event;
           let endir = data.end_event;
           let satt = data.allDay;
 
           eventsList = {
+            id: idx,
             title : heiti,
             start: new Date(byrjar),
             end: new Date(endir),
@@ -69,17 +74,17 @@ export function DataTofla( {id} ) {
           };
 
           EventLists.push(eventsList);
+          console.log(EventLists); 
 
         });
-      
+       
       } catch(e) {
         console.warn("Error", e);     
       }
-      setVerkefniData(json2); 
+      setVerkefniData(json2);
+      //console.log(counterEvents); 
     }
-  
   fetchTulkurData();
-
   },[id]);
 
   const hideProductDialog = () => {
@@ -94,12 +99,14 @@ export function DataTofla( {id} ) {
     let calendarApi = zselectInfo.view.calendar
     if(title){
       calendarApi.addEvent({ // will render immediately. will call handleEventAdd
+        id: zselectInfo.id,
         title,
         start: zselectInfo.startStr,
         end: zselectInfo.endStr,
         allDay: zselectInfo.allDay,
         color: '#924ACE'
       }, true) // temporary=true, will get overwritten when reducer gives new events
+      console.log("id: " + id); 
       console.log("title " + title);
       console.log("start " + zselectInfo.startStr);
       console.log("end " + zselectInfo.endStr);
@@ -138,7 +145,8 @@ export function DataTofla( {id} ) {
     console.log(verkefniData);
   }
 
-  const removeProduct = () => {
+  const removeProduct = (zdeleteInfo) => {
+    console.log(zdeleteInfo.id);
     console.log("Eyða verkefni");
     setDeleteDialog(false); 
   }
