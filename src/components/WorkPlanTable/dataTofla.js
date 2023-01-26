@@ -23,7 +23,7 @@ let eventsList = {
   allDay: ''
 };
 
-let counterEvents = 0; 
+let z_idverkefni = 0; 
 let EventLists = [];
 
 export function DataTofla( {id} ) {
@@ -44,7 +44,7 @@ export function DataTofla( {id} ) {
       let json2;
 
       EventLists = [];
-      counterEvents = 1;
+      z_idverkefni = 0;
 
       try{
         const apiUrlId = apiUrl + '/project/events/';
@@ -59,7 +59,7 @@ export function DataTofla( {id} ) {
         json2 = await verkefni_result.json();
 
         json2.forEach(data => {
-          let idx = counterEvents++; 
+          let idx = data.idverkefni;
           let heiti = data.title;
           let byrjar = data.start_event;
           let endir = data.end_event;
@@ -72,6 +72,8 @@ export function DataTofla( {id} ) {
             end: new Date(endir),
             allDay: satt
           };
+          
+          z_idverkefni = data.idverkefni;
 
           EventLists.push(eventsList);
           console.log(EventLists); 
@@ -82,7 +84,7 @@ export function DataTofla( {id} ) {
         console.warn("Error", e);     
       }
       setVerkefniData(json2);
-      //console.log(counterEvents); 
+      console.log(z_idverkefni); 
     }
   fetchTulkurData();
   },[id]);
@@ -99,7 +101,7 @@ export function DataTofla( {id} ) {
     let calendarApi = zselectInfo.view.calendar
     if(title){
       calendarApi.addEvent({ // will render immediately. will call handleEventAdd
-        id: zselectInfo.id,
+        id: z_idverkefni++,
         title,
         start: zselectInfo.startStr,
         end: zselectInfo.endStr,
@@ -146,7 +148,7 @@ export function DataTofla( {id} ) {
   }
 
   const removeProduct = (zdeleteInfo) => {
-    console.log(zdeleteInfo.id);
+    console.log(zdeleteInfo.e);
     console.log("Eyða verkefni");
     setDeleteDialog(false); 
   }
@@ -160,7 +162,7 @@ export function DataTofla( {id} ) {
 
   const deleteDialogFooter = (
     <React.Fragment>
-        <Button label="Hætta" icon="pi pi-times" className="p-button-text" onClick={hideProductDialog} />
+        <Button label="Hætta" icon="pi pi-times" className="p-button-text" onClick={hideDeleteDialog} />
         <Button label="Eyða" icon="pi pi-check" className="p-button-text" onClick={removeProduct} />
     </React.Fragment>
   );
@@ -172,6 +174,7 @@ export function DataTofla( {id} ) {
 
   function handleEventClick(selectInfo){
     setDeleteDialog(true);
+    console.log(selectInfo.event.id);
     setDeleteInfo(selectInfo);
   }
 
