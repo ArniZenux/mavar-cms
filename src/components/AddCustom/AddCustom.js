@@ -7,7 +7,7 @@ import { classNames } from 'primereact/utils';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-export function AddInterpreterForm() {
+export function AddCustomForm() {
   /*const [firstname, setFirstName] = useState('');
   const [phonenr, setPhoneNr] = useState('');
   const [email, setEmail] = useState('');
@@ -32,7 +32,7 @@ export function AddInterpreterForm() {
       headers: {"Content-Type": "application/json" },
       body: JSON.stringify(data)
     };
-    success = await fetch(apiUrl + '/tulkur/adduser', requestOptions);
+    success = await fetch(apiUrl + '/custom/addUser', requestOptions);
     
     if(success){
       history.push('/tulkur');
@@ -81,7 +81,7 @@ export function AddInterpreterForm() {
   return (
    <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
     <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
-      <div className="text-900 font-medium text-900 text-xl mb-3">Bæta nýjan táknmálstúlk</div>
+      <div className="text-900 font-medium text-900 text-xl mb-3">Bæta nýjan viðskiptavin</div>
         <div className="surface-card p-3 shadow-2 border-round p-fluid">
           <Form onSubmit={onSubmit} initialValues={{ nafn: '', simi: '', netfang: '', stada: 'Virkur' }} validate={validate} render={({ handleSubmit }) => (
             <form onSubmit={handleSubmit} className="p-fluid">

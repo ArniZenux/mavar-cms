@@ -11,8 +11,8 @@ const apiUrl = process.env.REACT_APP_API_URL;
 
 export function AddProjectForm( ) {
   let [day, setDay] = useState(new Date());
-  let [start, setStart] = useState("00:00");
-  let [last, setLast] = useState("00:00");
+  let [start, setStart] = useState();
+  let [last, setLast] = useState();
   //const [APIData] = useState([]);
   const [showMessage, setShowMessage] = useState(false);
   const [formData, setFormData] = useState({});
@@ -115,7 +115,7 @@ export function AddProjectForm( ) {
       body: JSON.stringify(data)
     };
 
-    success = await fetch(apiUrl + '/project/addproject', requestOptions);
+    /*success = await fetch(apiUrl + '/project/addproject', requestOptions);
     
     if(success){
       history.push('/');
@@ -214,21 +214,13 @@ export function AddProjectForm( ) {
                     <Field name="start" render={({ input, meta }) => (
                       <div className="field mt-5 col-12 md:col-12">
                         <span className="p-float-label">
-                          <Calendar 
-                            id="start" 
-                            value={start} 
-                            onChange={(e) => setStart(e.value)} 
-                            mask="99:99"
-                            timeOnly 
-                            hourFormat="24" 
-                            {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}
-                          />
-                        <label htmlFor="start" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Klukka byrja*</label>
+                          <InputText id="start" type="date" {...input} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                          <label htmlFor="stadur" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Hvar er staður*</label>
                         </span>
                         {getFormErrorMessage(meta)}
                       </div>
                     )} />
-                  
+                    
                     <Field name="last" render={({ input, meta }) => (
                       <div className="field mt-5 col-12 md:col-12">
                         <span className="p-float-label">
@@ -236,7 +228,6 @@ export function AddProjectForm( ) {
                             id="last" 
                             value={last} 
                             onChange={(e) => setLast(e.value)} 
-                            mask=""
                             timeOnly
                             hourFormat="24" 
                             {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}
@@ -257,3 +248,22 @@ export function AddProjectForm( ) {
     </div>
   );
 }
+
+/*
+<Field name="start" render={({ input, meta }) => (
+                      <div className="field mt-5 col-12 md:col-12">
+                        <span className="p-float-label">
+                          <Calendar 
+                            id="start" 
+                            value={start} 
+                            onChange={(e) => setStart(e.value)} 
+                            timeOnly 
+                            hourFormat="24" 
+                            {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}
+                          />
+                        <label htmlFor="start" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Klukka byrja*</label>
+                        </span>
+                        {getFormErrorMessage(meta)}
+                      </div>
+                    )} />
+                  */
