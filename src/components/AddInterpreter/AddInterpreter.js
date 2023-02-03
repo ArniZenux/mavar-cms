@@ -79,10 +79,10 @@ export function AddInterpreterForm() {
   };
 
   return (
-   <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
-    <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
-      <div className="text-900 font-medium text-900 text-xl mb-3">Bæta nýjan táknmálstúlk</div>
-        <div className="surface-card p-3 shadow-2 border-round p-fluid">
+    <div className="surface-card shadow-2 border-round p-4">
+      <div className="flex mb-5">
+        <span className="text-xl ml-2 text-900 font-medium">Bæta nýjan táknmálstúlk</span>
+      </div>
           <Form onSubmit={onSubmit} initialValues={{ nafn: '', simi: '', netfang: '', stada: 'Virkur' }} validate={validate} render={({ handleSubmit }) => (
             <form onSubmit={handleSubmit} className="p-fluid">
               <div className="grid formgrid">
@@ -122,9 +122,15 @@ export function AddInterpreterForm() {
               </div>
               <Button label="Skrá" icon="pi pi-user-plus" className="w-auto ml-2" />
               </form>
-            )} />
-        </div>
+            )} 
+          />
       </div>
-    </div>
   )
 } 
+
+/*
+ <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
+    <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
+      <div className="text-900 font-medium text-900 text-xl mb-3">Bæta nýjan táknmálstúlk</div>
+        <div className="surface-card p-3 shadow-2 border-round p-fluid">
+        */

@@ -145,14 +145,6 @@ export function CustomList() {
     )
   }
 
-  /*const setData = (data) => {
-    let { id, nafn, simi, netfang } = data; 
-    localStorage.setItem('id', id);
-    localStorage.setItem('firstname', nafn);
-    localStorage.setItem('phonenr', simi);
-    localStorage.setItem('email',netfang);
-  }*/
-
   return (
     <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
       <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">

@@ -78,24 +78,30 @@ export function InterpreterProject(  ) {
 
   if(error){
     return (
-      <div className="card">
-        <div className="text-900 text-3xl font-medium mb-3">Nær ekki samband við vefþjónustuna...</div>
+      <div className="surface-card shadow-2 border-round p-4">
+        <div className="flex mb-5">
+          <span className="text-xl text-900 font-medium">Nær ekki samband við vefþjónustuna...</span>
+        </div>
       </div>
     )
   }
 
   if(loading){
     return (
-      <div className="card">
-        <div className="text-900 text-3xl font-medium mb-3">Sæki gögn...</div>
+      <div className="surface-card shadow-2 border-round p-4">
+        <div className="flex mb-5">
+          <span className="text-xl text-900 font-medium">Sæki gögn...</span>
+        </div>
       </div>
     )
   }
 
   if( APIData.length === 0){
      return (
-      <div className="card">
-          <div className="text-900 text-3xl font-medium mb-3">Enginn verkefni...</div>
+      <div className="surface-card shadow-2 border-round p-4">
+        <div className="flex mb-5">
+          <span className="text-xl text-900 font-medium">Engin verkefni...</span>
+        </div>
       </div>
     )
   }

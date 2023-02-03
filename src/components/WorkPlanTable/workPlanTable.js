@@ -41,24 +41,32 @@ export function WorkPlanTable() {
 
   if(error){
     return (
-      <div className="card">
-        <div className="text-900 text-3xl font-medium mb-3">Nær ekki samband við vefþjónustuna...</div>
+      <div className="surface-card shadow-2 border-round p-4">
+        <div className="flex mb-5">
+          <span className="text-xl ml-2 text-900 font-medium">Nær ekki samband við vefþjónustuna...</span>
+        </div>
       </div>
     )
   }
 
   if(loading){
     return (
-      <div className="card">
-        <div className="text-900 text-3xl font-medium mb-3">Sæki gögn...</div>
+      <div className="flex-wrap justify-content-center" style={{ margin: '0 auto', width: '70%' }}>
+      <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
+          <div className="surface-card p-3 shadow-2 border-round p-fluid">
+            <span className="text-xl ml-2 text-900 font-medium">Sæki gögn...</span>
+          </div>
+        </div>
       </div>
     )
   }
 
   if( tulkurData.length === 0){
      return (
-      <div className="card">
-          <div className="text-900 text-3xl font-medium mb-3">Enginn túlkur...</div>
+      <div className="surface-card shadow-2 border-round p-4">
+        <div className="flex mb-5">
+          <span className="text-xl ml-2 text-900 font-medium">Enginn túlkur...</span>
+        </div>
       </div>
     )
   }
@@ -66,7 +74,6 @@ export function WorkPlanTable() {
   return (
     <div className="flex-wrap justify-content-center" style={{ margin: '0 auto', width: '70%' }}>
       <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
-        <div className="text-900 font-medium text-900 text-xl mb-3">Vinnutöflu túlka</div>
           <div className="surface-card p-3 shadow-2 border-round p-fluid">
           <div className="grid formgrid">
             <div className="field mb-4 col-12 md:col-2">  

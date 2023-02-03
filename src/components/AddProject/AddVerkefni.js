@@ -154,10 +154,10 @@ export function AddProjectForm( ) {
   };
 
   return (
-    <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
-      <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
-        <div className="text-900 font-medium text-900 text-xl mb-3">Skrá nýtt verkefni</div>
-          <div className="surface-card p-3 shadow-2 border-round p-fluid">
+    <div className="surface-card shadow-2 border-round p-4">
+      <div className="flex mb-2">
+        <span className="text-xl ml-2 text-900 font-medium">Skrá nýtt verkefni</span>
+      </div>
             <Form onSubmit={onSubmit} initialValues={{ lysing: '', hver: '', stadur: '', dropdown: '', dropdown2: '', dagtal: '', start: '', last: ''}} validate={validate} render={({ handleSubmit }) => (
               <form onSubmit={handleSubmit} className="p-fluid">
                 <div className="grid formgrid">
@@ -275,8 +275,6 @@ export function AddProjectForm( ) {
               <Button type="submit" label="Skrá verkefni" icon="pi pi-pencil" className="w-auto ml-2" />
               </form>
             )} />
-          </div>
-      </div>
     </div>
   );
 }

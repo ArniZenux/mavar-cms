@@ -14,7 +14,7 @@ export function TulkurList() {
   const [error, setError] = useState(null);
   const [APIData, setAPIData] = useState([]);
   //const [products2, setProducts2] = useState(null);
-  const [products3, setProducts3] = useState(null);
+  //const [products3, setProducts3] = useState(null);
   const [editingRows, setEditingRows] = useState({});
 
   let success = true; 
@@ -70,7 +70,9 @@ export function TulkurList() {
           body: JSON.stringify(newData)
         };
         
-        success = await fetch(apiUrl + '/tulkur/updateuser/' + newData.id, requestOptions);
+        let url = apiUrl + '/tulkur/updateuser/' + newData.id; 
+        
+        success = await fetch(url , requestOptions);
        
         setAPIData(_APIData);
         }
@@ -123,16 +125,20 @@ export function TulkurList() {
 
   if(error){
     return (
-      <div className="card">
-        <div className="text-900 text-3xl font-medium mb-3">Nær ekki samband við vefþjónustuna...</div>
+      <div className="surface-card shadow-2 border-round p-4">
+        <div className="flex mb-5">
+          <div className="text-900 text-3xl font-medium mb-3">Nær ekki samband við vefþjónustuna...</div>
+        </div>
       </div>
     )
   }
 
   if(loading){
     return (
-      <div className="card">
-        <div className="text-900 text-3xl font-medium mb-3">Sæki gögn...</div>
+      <div className="surface-card shadow-2 border-round p-4">
+        <div className="flex mb-5">
+          <span className="text-xl text-900 font-medium">Sæki gögn...</span>
+        </div>
       </div>
     )
   }
@@ -145,28 +151,25 @@ export function TulkurList() {
     )
   }
 
-  /*const setData = (data) => {
-    let { id, nafn, simi, netfang } = data; 
-    localStorage.setItem('id', id);
-    localStorage.setItem('firstname', nafn);
-    localStorage.setItem('phonenr', simi);
-    localStorage.setItem('email',netfang);
-  }*/
-
   return (
-    <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
-      <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
-        <div className="text-900 font-medium text-900 text-xl mb-3">Listi af táknmálstúlkum</div>
-          <div className="surface-card p-3 shadow-2 border-round p-fluid">
-          <DataTable value={APIData} editMode="row" dataKey="id" editingRows={editingRows} onRowEditChange={onRowEditChange} onRowEditComplete={onRowEditComplete2} responsiveLayout="scroll">
-            <Column field="nafn" header="Nafn" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
-            <Column field="simi" header="Sími" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
-            <Column field="netfang" header="Netfang" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
-            <Column field="stada" header="Staða" body={statusBodyTemplate} editor={(options) => statusEditor(options)} style={{ width: '20%' }}></Column>
-            <Column rowEditor headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
-          </DataTable>
-        </div>
+    <div className="surface-card shadow-2 border-round p-4">
+      <div className="flex mb-5">
+        <span className="text-xl text-900 font-medium">Listi af táknmálstúlkum</span>
       </div>
+      <DataTable value={APIData} editMode="row" dataKey="id" editingRows={editingRows} onRowEditChange={onRowEditChange} onRowEditComplete={onRowEditComplete2} responsiveLayout="scroll">
+        <Column field="nafn" header="Nafn" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
+        <Column field="simi" header="Sími" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
+        <Column field="netfang" header="Netfang" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
+        <Column field="stada" header="Staða" body={statusBodyTemplate} editor={(options) => statusEditor(options)} style={{ width: '20%' }}></Column>
+        <Column rowEditor headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
+      </DataTable>
     </div>
   )
 }
+
+/*
+ <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
+   <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
+    <div className="text-900 font-medium text-900 text-xl mb-3">Listi af táknmálstúlkum</div>
+      <div className="surface-card p-3 shadow-2 border-round p-fluid">
+*/

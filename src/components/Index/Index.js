@@ -1,17 +1,23 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { Link } from 'react-router-dom';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
+import './DataTableDemo.css';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function Index() {
+
+  const interval = useRef(0); 
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [beidniData, setBeidniData] = useState([]);
+  const [products, setProducts] = useState(null);
   
   useEffect(() => {
+    interval.current = setInterval(() => { fetchBeidniData() } , 300);
+
     async function fetchBeidniData(){
       setLoading(true); 
       setError(null); 
@@ -33,9 +39,13 @@ export function Index() {
       finally{
         setLoading(false); 
       }
-      setBeidniData(json);
+      setProducts(json);
      }
-   fetchBeidniData(); 
+
+    return () => {
+    clearInterval(interval.current);
+    interval.current = null; 
+  }
   },[]);
 
   const changeFall = () => {
@@ -63,37 +73,88 @@ export function Index() {
    )
   }
 
-  if(loading){
+  if(products === null){
     return(
       <div className="surface-card shadow-2 border-round p-4">
         <div className="flex justify-content-between align-items-center mb-5">
           <span className="text-xl text-900 font-medium">Nýbeiðni um táknmálstúlk</span>
         </div>
-            <span className="text-xl text-900 font-medium">Engin beiðni ennþá skráð. </span>
+            <span className="text-xl text-900 font-medium">Augnblik.....</span>
       </div>
     )
+  } 
+
+  const editProduct = (product) => {
+    console.log("Breyta");
+    //setProduct({...product});
+    //setProductDialog(true);
+  }
+
+  const confirmDeleteProduct = (product) => {
+    console.log("Confirm");
+    //setProduct(product);
+    //setDeleteProductDialog(true);
+  }
+
+  const statusBodyTemplate = (rowData) => {
+    if(rowData.zstatus === 0){
+      return <span className={`product-badge status-${rowData.zstatus} pr-3 pl-3 pt-1 pb-1`}>Enginn laus</span>;
+    }
+    if(rowData.zstatus === 1){
+      return <span className={`product-badge status-${rowData.zstatus} pr-3 pl-3 pt-1 pb-1`}>Túlkur kemur</span>;
+    }
+    else if(rowData.zstatus === 2){
+      return <span className={`product-badge status-${rowData.zstatus} pr-3 pl-3 pt-1 pb-1`}>Nýbeiðni</span>;
+    }
+    else if(rowData.zstatus === 3){
+      return <span className={`product-badge status-${rowData.zstatus} pr-3 pl-3 pt-1 pb-1`}>Afbókun</span>;
+    }
+  }
+
+  const actionBodyTemplate = (rowData) => {
+    if(rowData.zstatus === 0 || rowData.zstatus === 3 ){
+      return(
+        <React.Fragment>
+          <Button disabled  icon="pi pi-ban" className="p-button-rounded p-button-danger mr-2" />
+        </React.Fragment>
+      )
+    }
+    else{
+      return (
+        <React.Fragment>
+          <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editProduct(rowData)} />
+          <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteProduct(rowData)} />
+        </React.Fragment>
+      );
+    }
   }
 
   return (
-    <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
-    <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
-      <div className="text-900 font-medium text-900 text-xl mb-3">Nýbeiðni um táknmálstúlk</div>
-        <div className="surface-card p-3 shadow-2 border-round p-fluid">
-          <DataTable value={beidniData} editMode="row" dataKey="id"  responsiveLayout="scroll">
-            <Column field="zdesc" header="Heiti" style={{ width: '25%' }}></Column>
-            <Column field="place" header="Stadur" style={{ width: '10%' }}></Column>
-            <Column field="zday" header="Dagur" style={{ width: '10%' }}></Column>
-            <Column field="start_time" header="Byrja" style={{ width: '10%' }}></Column>
-            <Column field="last_time" header="Endir" style={{ width: '10%' }}></Column>
-            <Column field="zname" header="Hver pantar" style={{ width: '10%' }}></Column>
-            <Column header="" body={button1} style={{ width: '10%' }}></Column>
-          </DataTable>
-        </div>
-      </div>
+    <div className="surface-card shadow-2 border-round p-4">
+    <div className="flex mb-5">
+      <span className="text-xl text-900 font-medium">Nýbeiðni um táknmálstúlk</span>
+    </div>
+      <DataTable value={products} editMode="row" dataKey="id" size="small" paginator rows={10} 
+        responsiveLayout="scroll" emptyMessage="Engin beiðni ennþá skráð.">
+        <Column field="zdesc" header="Heiti" style={{ width: '25%' }}></Column>
+        <Column field="place" header="Stadur" style={{ width: '10%' }}></Column>
+        <Column field="zday" header="Dagur" style={{ width: '10%' }}></Column>
+        <Column field="start_time" header="Byrja" style={{ width: '10%' }}></Column>
+        <Column field="last_time" header="Endir" style={{ width: '10%' }}></Column>
+        <Column field="zstatus" header="Staða" body={statusBodyTemplate} style={{ minWidth: '5rem' }}></Column>
+        <Column field="zname" header="Hver pantar" style={{ width: '10%' }}></Column>
+        <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '8rem' }}></Column>
+      </DataTable>
     </div>
   )
 
   /* return (
+
+    <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
+    <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
+      <div className="text-900 font-medium text-900 text-xl mb-3">Nýbeiðni um táknmálstúlk</div>
+        <div className="surface-card p-3 shadow-2 border-round p-fluid">
+    
     <div className="surface-card shadow-2 border-round p-4">
       <div className="flex mb-5">
         <span className="text-xl text-900 font-medium">Beiðni sem um eftir túlk</span>

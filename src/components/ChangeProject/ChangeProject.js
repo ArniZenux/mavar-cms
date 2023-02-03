@@ -237,46 +237,51 @@ export function ChangeProjectForm(id) {
 
   if(error){
     return (
-      <div className="card">
-        <div className="text-900 text-3xl font-medium mb-3">Nær ekki samband við vefþjónustuna...</div>
+      <div className="surface-card shadow-2 border-round p-4">
+        <div className="flex mb-5">
+          <span className="text-xl ml-2 text-900 font-medium">Nær ekki samband við vefþjónustuna...</span>
+        </div>
       </div>
     )
   }
 
   if(loading){
     return (
-      <div className="card">
-        <div className="text-900 text-3xl font-medium mb-3">Sæki gögn...</div>
+      <div className="surface-card shadow-2 border-round p-4">
+        <div className="flex mb-5">
+          <span className="text-xl ml-2 text-900 font-medium">Sæki gögn...</span>
+        </div>
       </div>
     )
   }
 
   if( APIData.length === 0){
      return (
-      <div className="card">
-          <div className="text-900 text-3xl font-medium mb-3">Enginn verkefni...</div>
+      <div className="surface-card shadow-2 border-round p-4">
+        <div className="flex mb-5">
+          <span className="text-xl ml-2 text-900 font-medium">Engin verkefni...</span>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
-      <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
-        <div className="text-900 font-medium text-900 text-xl mb-3">Breyta verkefni</div>
-          <div className="surface-card p-3 shadow-2 border-round p-fluid">
-          <Toast ref={toast} />
-            <DataTable ref={df} value={APIData} editMode="row" dataKey="id" responsiveLayout="scroll"> 
-              <Column field="heiti" header="Heiti" style={{ width: '25%' }}></Column>
-              <Column field="stadur" header="Stadur" style={{ width: '10%' }}></Column>
-              <Column field="dagur" header="Dagur" style={{ width: '10%' }}></Column>
-              <Column field="byrja_timi" header="Byrja" style={{ width: '10%' }}></Column>
-              <Column field="endir_timi" header="Endir" style={{ width: '10%' }}></Column>
-              <Column field="vettvangur" header="Vettvangur" style={{ width: '10%' }}></Column>
-              <Column field="nameuser" header="Hver pantar" style={{ width: '10%' }}></Column>
-              <Column body={renderButton1} exportable={false} style={{ width: '10%' }}></Column>
-            </DataTable>
-          </div>
-        </div>
+    <div className="surface-card shadow-2 border-round p-4">
+      <div className="flex mb-5">
+        <span className="text-xl ml-2 text-900 font-medium">Breyta verkefni</span>
+      </div>
+
+      <Toast ref={toast} />
+        <DataTable ref={df} value={APIData} editMode="row" size='small' dataKey="id" responsiveLayout="scroll"> 
+          <Column field="heiti" header="Heiti" style={{ width: '25%' }}></Column>
+          <Column field="stadur" header="Stadur" style={{ width: '10%' }}></Column>
+          <Column field="dagur" header="Dagur" style={{ width: '10%' }}></Column>
+          <Column field="byrja_timi" header="Byrja" style={{ width: '10%' }}></Column>
+          <Column field="endir_timi" header="Endir" style={{ width: '10%' }}></Column>
+          <Column field="vettvangur" header="Vettvangur" style={{ width: '10%' }}></Column>
+          <Column field="nameuser" header="Hver pantar" style={{ width: '10%' }}></Column>
+          <Column body={renderButton1} exportable={false} style={{ width: '10%' }}></Column>
+        </DataTable>
 
         <Dialog visible={productDialog} style={{ width: '1000px', height:'790px' }} header="Breyta verkefnalýsing" modal className="p-fluid" footer={productDialogFooter} onHide={hideProductDialog}>
         <Form onSubmit={onSubmit} initialValues={{ heiti: '', hver: '', stadur: '', dropdown: '', dropdown2: '', day: '', start: '', last: ''}} validate={validate} render={({ handleSubmit }) => (
