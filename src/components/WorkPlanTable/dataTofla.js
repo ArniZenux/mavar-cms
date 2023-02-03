@@ -138,7 +138,7 @@ export function DataTofla( {id} ) {
       setStart('00:00');
       setLast('00:00');
 
-      let success = await fetch(apiUrl + '/project/addnewevent', requestOptions);
+      //let success = await fetch(apiUrl + '/project/addnewevent', requestOptions);
     }
 
     setProductDialog(false);

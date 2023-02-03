@@ -6,6 +6,10 @@ import { Home } from './pages/home';
 import { Tulkur } from './pages/tulkur';
 import { AddInterpreter } from './pages/addInterpreter';
 import { InterpreterProjectList } from './pages/interpreterProjectList';
+
+import { Custom } from './pages/customs';
+import { AddCustom } from './pages/addCustom';
+
 import { ProjectList } from './pages/projectList';
 import { AddProject } from './pages/addproject';
 import { ChangeProject } from './pages/changeProject';
@@ -64,6 +68,9 @@ function App() {
             <Route exact path="/tulkaverkefni" element={<InterpreterProjectList />} />
             <Route exact path="/tulkur" element={<Tulkur />} />
             <Route exact path="/nyrtulkur" element={<AddInterpreter />} />
+
+            <Route exact path="/vidskiptavinir" element={<Custom />} />
+            <Route exact path="/nyrvidskiptavinur" element={<AddCustom />} />
 
             <Route exact path="/verkefnalisti" element={<ProjectList />} />
             <Route exact path="/nyttverkefni" element={<AddProject />} />
