@@ -13,6 +13,7 @@ export function AddProjectForm( ) {
   let [day, setDay] = useState(new Date());
   let [start, setStart] = useState("00:00");
   let [last, setLast] = useState("00:00");
+
   //const [APIData] = useState([]);
   const [showMessage, setShowMessage] = useState(false);
   const [formData, setFormData] = useState({});
@@ -99,16 +100,32 @@ export function AddProjectForm( ) {
     return errors;
   };
 
+  const onChangeStartTime = e => {
+    let hour = new Date(e.target.value).getHours();
+    let min = new Date(e.target.value).getMinutes();
+    let newStartTime = `${hour}:${min}`;
+    setStart(newStartTime);
+    //setDate(e.target.value);
+  }
+
+  const onChangeLastTime = e => {
+    let hour = new Date(e.target.value).getHours();
+    let min = new Date(e.target.value).getMinutes();
+    let newLastTime = `${hour}:${min}`;
+    setLast(newLastTime);
+    //setDate(e.target.value);
+  }
+  
   const onSubmit = (data, form) => {
     setFormData(data);
     setShowMessage(true);
     console.log(data); 
     form.reset();
+    
+    day = day.toLocaleDateString('IS'); 
+    //data =  { nameproject, place, day, start, last, vettvangur, nameuser, tulkur };
+    //console.log(data); 
     /*
-     day = day.toLocaleDateString('IS'); 
-    const data =  { nameproject, place, day, start, last, vettvangur, nameuser, tulkur };
-    console.log(data); 
-
     const requestOptions = {
       method: 'POST',
       headers: {"Content-Type": "application/json" },
@@ -124,6 +141,10 @@ export function AddProjectForm( ) {
       console.log("Ekki virkur");
     }*/
   }
+
+  //const onPlaceChange = e => setPlace(e.target.value); 
+
+ 
 
   const isFormFieldValid = (meta) => !!(meta.touched && meta.error);
   const getFormErrorMessage = (meta) => {
@@ -215,12 +236,12 @@ export function AddProjectForm( ) {
                       <div className="field mt-5 col-12 md:col-12">
                         <span className="p-float-label">
                           <Calendar 
-                            id="start" 
                             value={start} 
+                            //onChange={onChangeStartTime}
                             onChange={(e) => setStart(e.value)} 
-                            mask="99:99"
                             timeOnly 
                             hourFormat="24" 
+                            
                             {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}
                           />
                         <label htmlFor="start" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Klukka byrja*</label>
@@ -235,8 +256,8 @@ export function AddProjectForm( ) {
                           <Calendar 
                             id="last" 
                             value={last} 
+                            //onChange={onChangeLastTime}
                             onChange={(e) => setLast(e.value)} 
-                            mask=""
                             timeOnly
                             hourFormat="24" 
                             {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}

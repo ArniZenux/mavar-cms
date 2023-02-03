@@ -178,6 +178,13 @@ export function DataTofla( {id} ) {
     setDeleteInfo(selectInfo);
   }
 
+  const pickTime = (e) => {
+    let hour = new Date(e).getHours() ;
+    let min = new Date(e).getMinutes();
+    let start_time = `${hour}:${min}`; 
+    console.log(start_time); 
+  }
+
   return (
     <div>
       <div className="card">
@@ -234,7 +241,8 @@ export function DataTofla( {id} ) {
               <Calendar 
                 id="start" 
                 value={start} 
-                onChange={(e) => setStart(e.target.value)} 
+                //onChange={(e) => setStart(e.target.value)} 
+                onChange={pickTime()}
                 mask=""
                 timeOnly
                 hourFormat="24" 
