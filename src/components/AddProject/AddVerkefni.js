@@ -247,8 +247,6 @@ export function AddProjectForm( ) {
                             {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}
                           />
                         <label htmlFor="start" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Klukka byrja*</label>
-                          <InputText id="start" type="date" {...input} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
-                          <label htmlFor="stadur" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Hvar er staður*</label>
                         </span>
                         {getFormErrorMessage(meta)}
                       </div>

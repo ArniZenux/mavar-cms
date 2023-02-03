@@ -80,12 +80,12 @@ export function Index() {
       <div className="text-900 font-medium text-900 text-xl mb-3">Nýbeiðni um táknmálstúlk</div>
         <div className="surface-card p-3 shadow-2 border-round p-fluid">
           <DataTable value={beidniData} editMode="row" dataKey="id"  responsiveLayout="scroll">
-            <Column field="lysing" header="Heiti" style={{ width: '25%' }}></Column>
-            <Column field="stadur" header="Stadur" style={{ width: '10%' }}></Column>
-            <Column field="dagur" header="Dagur" style={{ width: '10%' }}></Column>
-            <Column field="byrja_timi" header="Byrja" style={{ width: '10%' }}></Column>
-            <Column field="endir_timi" header="Endir" style={{ width: '10%' }}></Column>
-            <Column field="nameuser" header="Hver pantar" style={{ width: '10%' }}></Column>
+            <Column field="zdesc" header="Heiti" style={{ width: '25%' }}></Column>
+            <Column field="place" header="Stadur" style={{ width: '10%' }}></Column>
+            <Column field="zday" header="Dagur" style={{ width: '10%' }}></Column>
+            <Column field="start_time" header="Byrja" style={{ width: '10%' }}></Column>
+            <Column field="last_time" header="Endir" style={{ width: '10%' }}></Column>
+            <Column field="zname" header="Hver pantar" style={{ width: '10%' }}></Column>
             <Column header="" body={button1} style={{ width: '10%' }}></Column>
           </DataTable>
         </div>
