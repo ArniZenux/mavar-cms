@@ -2,10 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Dropdown } from 'primereact/dropdown';
-import { Button } from 'primereact/button';
-import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
-//import { Link } from 'react-router-dom';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -13,11 +10,7 @@ export function TulkurList() {
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
   const [APIData, setAPIData] = useState([]);
-  //const [products2, setProducts2] = useState(null);
-  //const [products3, setProducts3] = useState(null);
   const [editingRows, setEditingRows] = useState({});
-
-  let success = true; 
 
   useEffect(() => {
     async function fetchData(){
@@ -27,8 +20,9 @@ export function TulkurList() {
       let json; 
 
       try {
-        const result = await fetch(apiUrl + `/tulkur`); 
-        console.log(result);
+        let url = apiUrl + '/tulkur';
+
+        const result = await fetch(url); 
         
         if(!result.ok){
           throw new Error('Ekki ok');
@@ -48,29 +42,30 @@ export function TulkurList() {
    
     fetchData(); 
   }, []);
-
+ 
   const onRowEditComplete2 = async (e) => {
     let _APIData = [...APIData];
     let { newData, index } = e;
+    let success = true; 
 
     _APIData[index] = newData;
 
     try {
       
-      console.log(newData)
-      console.log(newData.id);
+      //console.log(newData)
+      //console.log(newData.id);
 
-      if( newData.nafn === '' || newData.simi === '' || newData.netfang === '' ) {
+      if( newData.zname === '' || newData.phonenr === '' || newData.email === '' ) {
         console.log('Empty');
       }
        else {
         const requestOptions = {
-          method: 'PUT',
+          method: 'POST',
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newData)
         };
         
-        let url = apiUrl + '/tulkur/updateuser/' + newData.id; 
+        let url = apiUrl + '/tulkur/updateinterpreter/' + newData.id; 
         
         success = await fetch(url , requestOptions);
        
@@ -102,8 +97,8 @@ export function TulkurList() {
     );
   }
 
-  const getStatusLabel = (stada) => {
-    switch (stada) {
+  const getStatusLabel = (zstatus) => {
+    switch (zstatus) {
         case 'Virkur':
             return 'Virkur';
         case 'í leyfi':
@@ -120,7 +115,7 @@ export function TulkurList() {
   }
 
   const statusBodyTemplate = (APIData) => {
-    return getStatusLabel(APIData.stada);
+    return getStatusLabel(APIData.zstatus);
   }
 
   if(error){
@@ -156,20 +151,13 @@ export function TulkurList() {
       <div className="flex mb-5">
         <span className="text-xl text-900 font-medium">Listi af táknmálstúlkum</span>
       </div>
-      <DataTable value={APIData} editMode="row" dataKey="id" editingRows={editingRows} onRowEditChange={onRowEditChange} onRowEditComplete={onRowEditComplete2} responsiveLayout="scroll">
-        <Column field="nafn" header="Nafn" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
-        <Column field="simi" header="Sími" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
-        <Column field="netfang" header="Netfang" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
-        <Column field="stada" header="Staða" body={statusBodyTemplate} editor={(options) => statusEditor(options)} style={{ width: '20%' }}></Column>
+      <DataTable value={APIData} editMode="row" dataKey="id" size='small' editingRows={editingRows} onRowEditChange={onRowEditChange} onRowEditComplete={onRowEditComplete2} responsiveLayout="scroll">
+        <Column field="zname" header="Nafn" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
+        <Column field="phonenr" header="Sími" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
+        <Column field="email" header="Netfang" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
+        <Column field="zstatus" header="Staða" body={statusBodyTemplate} editor={(options) => statusEditor(options)} style={{ width: '20%' }}></Column>
         <Column rowEditor headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
       </DataTable>
     </div>
   )
 }
-
-/*
- <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
-   <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
-    <div className="text-900 font-medium text-900 text-xl mb-3">Listi af táknmálstúlkum</div>
-      <div className="surface-card p-3 shadow-2 border-round p-fluid">
-*/

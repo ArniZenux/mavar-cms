@@ -46,7 +46,7 @@ export function AddProjectForm( ) {
       let json; 
 
       try {
-        const result = await fetch(apiUrl + `/tulkur/byname`); 
+        const result = await fetch(apiUrl + `/tulkur/getName`); 
         //console.log(result);
         
         if(!result.ok){
@@ -125,6 +125,8 @@ export function AddProjectForm( ) {
     form.reset();
     
     day = day.toLocaleDateString('IS'); 
+    console.log(day); 
+    
     //data =  { nameproject, place, day, start, last, vettvangur, nameuser, tulkur };
     //console.log(data); 
     /*

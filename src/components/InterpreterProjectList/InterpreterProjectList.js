@@ -23,7 +23,9 @@ export function InterpreterProject(  ) {
       let json; 
 
       try {
-        const result = await fetch(apiUrl + `/project/byTulkur`);
+        let url = apiUrl + `/project/byTulkur`;
+        
+        const result = await fetch(url);
         
         if(!result.ok){
           throw new Error('Ekki ok');
@@ -113,8 +115,8 @@ export function InterpreterProject(  ) {
           <div className="surface-card p-3 shadow-2 border-round p-fluid">
             <DataTable value={APIData} paginator rows={20} filters={filters1} filterDisplay="menu" 
               className="p-datatable-customers" loading={loading1} dataKey="id"  responsiveLayout="scroll"
-              globalFilterFields={['nafn']} header={header1} emptyMessage="Enginn túlkur finnst.">
-              <Column field="nafn" header="Túlkur" style={{ width: '15%' }}></Column>
+              globalFilterFields={['zname']} header={header1} emptyMessage="Enginn túlkur finnst.">
+              <Column field="zname" header="Túlkur" style={{ width: '15%' }}></Column>
               <Column field="heiti" header="Heiti" style={{ width: '20%' }}></Column>
               <Column field="stadur" header="Stadur" style={{ width: '20%' }}></Column>
               <Column field="dagur" header="Dagur" style={{ width: '10%' }}></Column>

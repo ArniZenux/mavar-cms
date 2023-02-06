@@ -1,11 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { Dropdown } from 'primereact/dropdown';
-import { Button } from 'primereact/button';
-import { Toast } from 'primereact/toast';
+//import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
-//import { Link } from 'react-router-dom';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -13,8 +10,6 @@ export function CustomList() {
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
   const [APIData, setAPIData] = useState([]);
-  //const [products2, setProducts2] = useState(null);
-  const [products3, setProducts3] = useState(null);
   const [editingRows, setEditingRows] = useState({});
 
   let success = true; 
@@ -27,7 +22,8 @@ export function CustomList() {
       let json; 
 
       try {
-        const result = await fetch(apiUrl + `/tulkur`); 
+        let url = apiUrl + `/custom`;
+        const result = await fetch(url); 
         console.log(result);
         
         if(!result.ok){
@@ -57,20 +53,22 @@ export function CustomList() {
 
     try {
       
-      console.log(newData)
-      console.log(newData.id);
+      //console.log(newData)
+      //console.log(newData.id);
 
-      if( newData.nafn === '' || newData.simi === '' || newData.netfang === '' ) {
+      if( newData.zname === '' || newData.phonenr === '' || newData.email === '' ) {
         console.log('Empty');
       }
        else {
         const requestOptions = {
-          method: 'PUT',
+          method: 'POST',
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newData)
         };
+
+        let url = apiUrl + '/custom/updatecustom/' + newData.id;
         
-        success = await fetch(apiUrl + '/tulkur/updateuser/' + newData.id, requestOptions);
+        success = await fetch(url, requestOptions);
        
         setAPIData(_APIData);
         }
@@ -84,41 +82,8 @@ export function CustomList() {
     setEditingRows(e.data);
   }
 
-  const statuses = [
-    { label: 'Virkur', value: 'Virkur' },
-    { label: 'í leyfi', value: 'í leyfi' },
-    { label: 'Hættur', value: 'Hættur' }
-  ];
-  
-  const statusEditor = (options) => {
-    return (
-        <Dropdown value={options.value} options={statuses} optionLabel="label" optionValue="value"
-            onChange={(e) => options.editorCallback(e.value)} placeholder="Veldu stöðu"
-            itemTemplate={(option) => {
-                return <span className={`product-badge status-${option.value.toLowerCase()}`}>{option.label}</span>
-            }} />
-    );
-  }
-
-  const getStatusLabel = (stada) => {
-    switch (stada) {
-        case 'Virkur':
-            return 'Virkur';
-        case 'í leyfi':
-            return 'í leyfi';
-        case 'Hættur':
-            return 'Hættur';
-        default:
-            return '--';
-    }
-  }
-
   const textEditor = (options) => {
     return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
-  }
-
-  const statusBodyTemplate = (APIData) => {
-    return getStatusLabel(APIData.stada);
   }
 
   if(error){
@@ -140,7 +105,7 @@ export function CustomList() {
   if( APIData.length === 0){
      return (
       <div className="card">
-          <div className="text-900 text-3xl font-medium mb-3">Enginn túlkur...</div>
+          <div className="text-900 text-3xl font-medium mb-3">Engir viðskiptavinir...</div>
       </div>
     )
   }
@@ -150,11 +115,10 @@ export function CustomList() {
       <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
         <div className="text-900 font-medium text-900 text-xl mb-3">Listi af viðskiptavinum</div>
           <div className="surface-card p-3 shadow-2 border-round p-fluid">
-          <DataTable value={APIData} editMode="row" dataKey="id" editingRows={editingRows} onRowEditChange={onRowEditChange} onRowEditComplete={onRowEditComplete2} responsiveLayout="scroll">
-            <Column field="nafn" header="Nafn" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
-            <Column field="simi" header="Sími" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
-            <Column field="netfang" header="Netfang" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
-            <Column field="stada" header="Staða" body={statusBodyTemplate} editor={(options) => statusEditor(options)} style={{ width: '20%' }}></Column>
+          <DataTable value={APIData} editMode="row" size='small' dataKey="id" editingRows={editingRows} onRowEditChange={onRowEditChange} onRowEditComplete={onRowEditComplete2} responsiveLayout="scroll">
+            <Column field="zname" header="Nafn" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
+            <Column field="phonenr" header="Sími" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
+            <Column field="email" header="Netfang" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
             <Column rowEditor headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
           </DataTable>
         </div>
