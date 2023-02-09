@@ -69,13 +69,15 @@ export function ChangeProjectForm(id) {
       const url = new URL(id, apiUrlId); 
 
       try {
-        const result = await fetch(apiUrl + `/project`);
+        let url = apiUrl + '/project/allProject'; 
+        
+        const result = await fetch(url);
         
         if(!result.ok){
           throw new Error('Ekki ok');
         }
         json = await result.json();
-        console.log(json); 
+        //console.log(json); 
 
       }
       catch(e){
@@ -93,33 +95,7 @@ export function ChangeProjectForm(id) {
     fetchData(); 
   }, [id]);
  
-/*  const onRowEditComplete2 = async (e) => {
-    let _APIData = [...APIData];
-    let { newData, index } = e;
 
-    _APIData[index] = newData;
-
-    try {
-
-      if( newData.nafn === '' || newData.simi === '' || newData.netfang === '' ) {
-        console.log('Empty');
-      }
-       else {
-        const requestOptions = {
-          method: 'PUT',
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newData)
-        };
-        
-        success = await fetch(apiUrl + '/project/updateproject/' + newData.id, requestOptions);
-       
-        setAPIData(_APIData);
-        }
-      }
-      catch(e){
-        console.log("Error", e);     
-    }
-  }*/
 
  const validate = (data) => {
     let errors = {};
@@ -273,14 +249,15 @@ export function ChangeProjectForm(id) {
 
       <Toast ref={toast} />
         <DataTable ref={df} value={APIData} editMode="row" size='small' dataKey="id" responsiveLayout="scroll"> 
-          <Column field="heiti" header="Heiti" style={{ width: '25%' }}></Column>
-          <Column field="stadur" header="Stadur" style={{ width: '10%' }}></Column>
-          <Column field="dagur" header="Dagur" style={{ width: '10%' }}></Column>
-          <Column field="byrja_timi" header="Byrja" style={{ width: '10%' }}></Column>
-          <Column field="endir_timi" header="Endir" style={{ width: '10%' }}></Column>
-          <Column field="vettvangur" header="Vettvangur" style={{ width: '10%' }}></Column>
-          <Column field="nameuser" header="Hver pantar" style={{ width: '10%' }}></Column>
-          <Column body={renderButton1} exportable={false} style={{ width: '10%' }}></Column>
+          <Column field="zname" header="Túlkur" style={{ width: '8%' }}></Column>
+          <Column field="title" header="Heiti" style={{ width: '25%' }}></Column>
+          <Column field="place" header="Stadur" style={{ width: '10%' }}></Column>
+          <Column field="zday" header="Dagur" style={{ width: '4%' }}></Column>
+          <Column field="start_time" header="Byrja" style={{ width: '4%' }}></Column>
+          <Column field="last_time" header="Endir" style={{ width: '4%' }}></Column>
+          <Column field="scene" header="Vettvangur" style={{ width: '6%' }}></Column>
+          <Column field="znamec" header="Hver pantar" style={{ width: '10%' }}></Column>
+          <Column body={renderButton1} exportable={false} style={{ width: '5%' }}></Column>
         </DataTable>
 
         <Dialog visible={productDialog} style={{ width: '1000px', height:'790px' }} header="Breyta verkefnalýsing" modal className="p-fluid" footer={productDialogFooter} onHide={hideProductDialog}>
@@ -440,3 +417,77 @@ export function ChangeProjectForm(id) {
       </div>
   )
 }
+
+/*  const onRowEditComplete2 = async (e) => {
+    let _APIData = [...APIData];
+    let { newData, index } = e;
+
+    _APIData[index] = newData;
+
+    try {
+
+      if( newData.nafn === '' || newData.simi === '' || newData.netfang === '' ) {
+        console.log('Empty');
+      }
+       else {
+        const requestOptions = {
+          method: 'PUT',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newData)
+        };
+        
+        success = await fetch(apiUrl + '/project/updateproject/' + newData.id, requestOptions);
+       
+        setAPIData(_APIData);
+        }
+      }
+      catch(e){
+        console.log("Error", e);     
+    }
+    /*  const onRowEditComplete2 = async (e) => {
+    let _APIData = [...APIData];
+    let { newData, index } = e;
+
+    _APIData[index] = newData;
+
+    try {
+
+      if( newData.nafn === '' || newData.simi === '' || newData.netfang === '' ) {
+        console.log('Empty');
+      }
+       else {
+        const requestOptions = {
+          method: 'PUT',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newData)
+        };
+        
+        success = await fetch(apiUrl + '/project/updateproject/' + newData.id, requestOptions);
+       
+        setAPIData(_APIData);
+        }
+      }
+      catch(e){
+        console.log("Error", e);     
+    }
+  }*/
+
+  /*const onRowEditChange = (e) => {
+    setEditingRows(e.data);
+  }*/
+
+  /*const textEditor = (options) => {
+    return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
+  }
+
+  const dateEditor = (options) => {
+    return <Calendar id="dagtal" value={day} onChange={(e) => setDay(e.target.value)} dateFormat="dd/mm/yy" mask="99/99/9999" />
+  }
+
+  const timeStartEditor = (options) => {
+    return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
+  }
+
+  const timeEndEditor = (options) => {
+    return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
+  }*/

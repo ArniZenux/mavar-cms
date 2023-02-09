@@ -10,19 +10,14 @@ import { classNames } from 'primereact/utils';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function AddProjectForm( ) {
+  let interpreterJson = [{ id: '', zname: '' }];
+  let customJson = [{ id: '', znamec: ''}];
+
   let [day, setDay] = useState(new Date());
-  //let [start, setStart] = useState("00:00");
-  //let [last, setLast] = useState("00:00");
-
-  let [start, setStart] = useState();
-  let [last, setLast] = useState();
-  //const [APIData] = useState([]);
-  const [showMessage, setShowMessage] = useState(false);
-  const [formData, setFormData] = useState({});
-  
-  let [ tulkur, setTulkur ] = useState({});
-
-  //eslint-disable-next-line} 
+  let [start_time, setStartTime] = useState("00:00");
+  let [last_time, setLastTime] = useState("00:00");
+  let [interpreter, setInterpreter] = useState(interpreterJson);
+  let [custom, setCustom] = useState(customJson);
 
   const vettvangalist = [
     { name: 'Almennt'},
@@ -31,78 +26,79 @@ export function AddProjectForm( ) {
     { name: 'Dómaramál'},
     { name: 'Meðferðarmál'}
   ];
-  
-  const tulkaJson = [
-    { name: 'Anna Dagmnar' },
-    { name: 'Iðunn Bjarnadóttir' },
-    { name: 'Daði Jónsson' },
-    { name: 'Örn Rúnar Karlsson'},
-    { name: 'Gerður Sjöfn Rúnardóttir'}
-  ];
-  
+ 
   useEffect(() => {
     async function fetchData(){
 
-      let json; 
+      let json_interpreter; 
+      let json_custom; 
 
       try {
-        const result = await fetch(apiUrl + `/tulkur/getName`); 
-        //console.log(result);
+        let url_interpreter = apiUrl + '/tulkur/getName';
+        let url_custom = apiUrl + '/custom/getNameCustom';
         
-        if(!result.ok){
-          throw new Error('Ekki tulkur ok');
+        const interpreterresult = await fetch(url_interpreter);
+        const customresult = await fetch(url_custom); 
+        
+        if(!interpreterresult.ok || !customresult.ok){
+          throw new Error('Fetch data is not ok');
         }
-        json = await result.json();
+        json_interpreter = await interpreterresult.json();
+        json_custom = await customresult.json();
+        
+        console.log(json_interpreter);
+        console.log(json_custom);
+
       }
       catch(e){
         console.warn('unable to fetch data', e); 
         return; 
       }
-      setTulkur(json); 
+      setInterpreter(json_interpreter); 
+      setCustom(json_custom); 
      }
-   
      fetchData(); 
   }, []); 
   
   const validate = (data) => {
     let errors = {};
 
-    if (!data.lysing) {
-      errors.lysing = 'Það vantar lýsing verkefna?';
+    if (!data.desc) {
+      errors.desc = 'Það vantar lýsing verkefna.';
     }
 
-    if (!data.hver) {
-      errors.hver = 'Hver er nafn sem pantar túlk?';
+    if (!data.dropdown) {
+      errors.dropdown = 'Hver er nafn sem pantar túlk?';
     }
 
-    if (!data.stadur) {
-      errors.stadur = 'Hvar er staður?';
+    if (!data.place) {
+      errors.place = 'Hvar er staður?';
     }
     
-    if(!data.dropdown){
-      errors.dropdown = 'Hvernig er vettvangur verkefna?';
-    }
-
     if(!data.dropdown2){
-      errors.dropdown2 = 'Það vantar túlk?';
+      errors.dropdown2 = 'Hvernig er vettvangur verkefna?';
     }
 
-    if (!data.dagtal) {
-        errors.dagtal = 'Hvaða er dagur?';
+    if(!data.dropdown3){
+      errors.dropdown3 = 'Það vantar túlk.';
     }
 
-    if (!data.start) {
-        errors.start = 'Hvenær byrjar verkefni?';
+    if (!data.day) {
+        errors.day = 'Hvaða dagur er fyrir verkefni?';
+    }
+
+    if (!data.start_time) {
+        errors.start_time = 'Hvenær byrjar verkefni?';
     }
     
-    if (!data.last) {
-      errors.last = 'Hvenær er verkefni búið?';
+    if (!data.last_time) {
+      errors.last_time = 'Hvenær er verkefni búið?';
     }
 
     return errors;
   };
 
-  const onChangeStartTime = e => {
+  /*const onChangeStartTime = e => {
     let hour = new Date(e.target.value).getHours();
     let min = new Date(e.target.value).getMinutes();
     let newStartTime = `${hour}:${min}`;
@@ -116,43 +112,86 @@ export function AddProjectForm( ) {
     let newLastTime = `${hour}:${min}`;
     setLast(newLastTime);
     //setDate(e.target.value);
-  }
+  }*/
   
-  const onSubmit = (data, form) => {
-    setFormData(data);
-    setShowMessage(true);
+  function addZero(i) {
+    if (i < 10) {i = "0" + i}
+    return i;
+  }
+
+  const onSubmit = async (data, form) => {
     console.log(data); 
-    form.reset();
+
+    //let path = `/`; 
+    let projectdata = [];
+    // let orderdata = [];
+    // let workdata = [];
+    //let success_order = true; 
+    let success_project = true; 
+    //let success_work = true; 
     
-    day = day.toLocaleDateString('IS'); 
-    console.log(day); 
+    projectdata.push(data.desc);
+    projectdata.push(data.dropdown.id);
+    projectdata.push(data.place);
+    projectdata.push(data.dropdown2.name);
+    projectdata.push(data.dropdown3.id);
     
-    //data =  { nameproject, place, day, start, last, vettvangur, nameuser, tulkur };
-    //console.log(data); 
-    /*
-    const requestOptions = {
+    projectdata.push(data.day.toLocaleDateString('IS'));
+    //projectdata.push(data.day);
+
+    let _startTimeHour = addZero(data.start_time.getHours());
+    let _startTimeMin = addZero(data.start_time.getMinutes());
+    let _start_time = `${_startTimeHour}:${_startTimeMin}`;
+    projectdata.push(_start_time);
+
+    let _lastTimeHour = addZero(data.last_time.getHours());
+    let _lastTimeMin = addZero(data.last_time.getMinutes());
+    let _last_time = `${_lastTimeHour}:${_lastTimeMin}`;
+
+    projectdata.push(_last_time);
+
+    console.log(projectdata);
+    
+    const requestOptionsProject = {
       method: 'POST',
       headers: {"Content-Type": "application/json" },
-      body: JSON.stringify(data)
+      body: JSON.stringify(projectdata)
     };
 
-    /*success = await fetch(apiUrl + '/project/addproject', requestOptions);
+    /*const requestOptionsOrder = {
+      method: 'POST',
+      headers: {"Content-Type": "application/json" },
+      body: JSON.stringify(orderdata)
+    };
+
+    const requestOptionsWork = {
+      method: 'POST',
+      headers: {"Content-Type": "application/json" },
+      body: JSON.stringify(workdata)
+    };*/
     
-    if(success){
-      history.push('/');
+    let url_project = apiUrl + '/project/add_project'; 
+    /*let url_order; 
+    let url_work; */
+
+    success_project = await fetch(url_project, requestOptionsProject);
+    //success_order = await fetch(apiUrl + '/project/add_order_project', requestOptionsOrder);
+    //success_work = await fetch(apiUrl + '/project/add_work_project', requestOptionsWork);
+    
+    if(success_project){
+     console.log('');
     }
     else {
       console.log("Ekki virkur");
-    }*/
+    }
+
+    form.reset();
   }
 
-  //const onPlaceChange = e => setPlace(e.target.value); 
-
- 
-
   const isFormFieldValid = (meta) => !!(meta.touched && meta.error);
+
   const getFormErrorMessage = (meta) => {
-   // return isFormFieldValid(meta) && <small className="p-error">{meta.error}</small>;
+    return isFormFieldValid(meta) && <small className="p-error">{meta.error}</small>;
   };
 
   return (
@@ -160,36 +199,16 @@ export function AddProjectForm( ) {
       <div className="flex mb-2">
         <span className="text-xl ml-2 text-900 font-medium">Skrá nýtt verkefni</span>
       </div>
-            <Form onSubmit={onSubmit} initialValues={{ lysing: '', hver: '', stadur: '', dropdown: '', dropdown2: '', dagtal: '', start: '', last: ''}} validate={validate} render={({ handleSubmit }) => (
+            <Form onSubmit={onSubmit} initialValues={{ desc: '', dropdown: '', place: '', dropdown2: '', dropdown3: '', day: '', start_time: '', last_time: ''}} validate={validate} render={({ handleSubmit }) => (
               <form onSubmit={handleSubmit} className="p-fluid">
                 <div className="grid formgrid">
                   <div className="field mb-4 col-12 md:col-6">
 
-                    <Field name="lysing" render={({ input, meta }) => (
+                    <Field name="desc" render={({ input, meta }) => (
                       <div className="field mt-4 col-12 md:col-12">
                         <span className="p-float-label">
-                          <InputTextarea id="lysing" autoResize rows={3} {...input} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
-                          <label htmlFor="lysing" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Lýsing*</label>
-                        </span>
-                        {getFormErrorMessage(meta)}
-                      </div>
-                    )} />
-                    
-                    <Field name="hver" render={({ input, meta }) => (
-                      <div className="field mt-5 col-12 md:col-12">
-                        <span className="p-float-label">
-                          <InputText id="hver" {...input} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
-                          <label htmlFor="hver" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Hver pantar*</label>
-                        </span>
-                        {getFormErrorMessage(meta)}
-                      </div>
-                    )} />
-                    
-                    <Field name="stadur" render={({ input, meta }) => (
-                      <div className="field mt-5 col-12 md:col-12">
-                        <span className="p-float-label">
-                          <InputText id="stadur" {...input} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
-                          <label htmlFor="stadur" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Hvar er staður*</label>
+                          <InputTextarea id="desc" autoResize rows={3} {...input} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                          <label htmlFor="desc" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Lýsing*</label>
                         </span>
                         {getFormErrorMessage(meta)}
                       </div>
@@ -198,18 +217,38 @@ export function AddProjectForm( ) {
                     <Field name="dropdown" render={({ input, meta }) => (
                       <div className="field mt-5 col-12 md:col-12">
                         <span className="p-float-label">
-                          <Dropdown inputId="dropdown" {...input} options={vettvangalist} optionLabel="name" className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
-                          <label htmlFor="dropdown" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Vettvangur*</label>
+                          <Dropdown inputId="dropdown" {...input} options={custom} optionLabel="znamec" className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                          <label htmlFor="dropdown" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Hver pantar*</label>
                         </span>
                         {getFormErrorMessage(meta)}
                       </div>
                     )} />
 
+                    <Field name="place" render={({ input, meta }) => (
+                      <div className="field mt-5 col-12 md:col-12">
+                        <span className="p-float-label">
+                          <InputText id="place" {...input} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                          <label htmlFor="place" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Hvar er staður*</label>
+                        </span>
+                        {getFormErrorMessage(meta)}
+                      </div>
+                    )} />
+                    
                     <Field name="dropdown2" render={({ input, meta }) => (
                       <div className="field mt-5 col-12 md:col-12">
                         <span className="p-float-label">
-                          <Dropdown inputId="dropdown2" {...input} options={tulkaJson} optionLabel="name" className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
-                          <label htmlFor="dropdown2" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Túlkur*</label>
+                          <Dropdown inputId="dropdown2" {...input} options={vettvangalist} optionLabel="name" className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                          <label htmlFor="dropdown2" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Vettvangur*</label>
+                        </span>
+                        {getFormErrorMessage(meta)}
+                      </div>
+                    )} />
+
+                    <Field name="dropdown3" render={({ input, meta }) => (
+                      <div className="field mt-5 col-12 md:col-12">
+                        <span className="p-float-label">
+                          <Dropdown inputId="dropdown3" {...input} options={interpreter} optionLabel="zname" className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                          <label htmlFor="dropdown3" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Túlkur*</label>
                         </span>
                         {getFormErrorMessage(meta)}
                       </div>
@@ -218,11 +257,11 @@ export function AddProjectForm( ) {
                   </div>
 
                   <div className="field mb-4 col-12 md:col-6">
-                    <Field name="dagtal" render={({ input, meta }) => (
+                    <Field name="day" render={({ input, meta }) => (
                       <div className="field md:mt-4 col-12 md:col-12">
                         <span className="p-float-label">
                           <Calendar 
-                            id="dagtal"
+                            id="day"
                             value={day}  
                             onChange={(e) => setDay(e.value)}
                             dateFormat="dd/mm/yy" 
@@ -230,19 +269,18 @@ export function AddProjectForm( ) {
                             showIcon 
                             {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}
                           />
-                          <label htmlFor="dagtal" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Dagtal*</label>
+                          <label htmlFor="day" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Dagtal*</label>
                         </span>    
                         {getFormErrorMessage(meta)}
                       </div>
                     )} />
 
-                    <Field name="start" render={({ input, meta }) => (
+                    <Field name="start_time" render={({ input, meta }) => (
                       <div className="field mt-5 col-12 md:col-12">
                         <span className="p-float-label">
                           <Calendar 
-                            value={start} 
-                            //onChange={onChangeStartTime}
-                            onChange={(e) => setStart(e.value)} 
+                            value={start_time} 
+                            onChange={(e) => setStartTime(e.value)} 
                             timeOnly 
                             hourFormat="24" 
                             
@@ -254,19 +292,18 @@ export function AddProjectForm( ) {
                       </div>
                     )} />
                     
-                    <Field name="last" render={({ input, meta }) => (
+                    <Field name="last_time" render={({ input, meta }) => (
                       <div className="field mt-5 col-12 md:col-12">
                         <span className="p-float-label">
                           <Calendar 
-                            id="last" 
-                            value={last} 
-                            //onChange={onChangeLastTime}
-                            onChange={(e) => setLast(e.value)} 
+                            id="last_time" 
+                            value={last_time} 
+                            onChange={(e) => setLastTime(e.value)} 
                             timeOnly
                             hourFormat="24" 
                             {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}
                           />
-                          <label htmlFor="last" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Klukka endir*</label>
+                          <label htmlFor="last_time" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Klukka endir*</label>
                         </span>
                         {getFormErrorMessage(meta)}
                       </div>
@@ -280,22 +317,3 @@ export function AddProjectForm( ) {
     </div>
   );
 }
-
-/*
-<Field name="start" render={({ input, meta }) => (
-                      <div className="field mt-5 col-12 md:col-12">
-                        <span className="p-float-label">
-                          <Calendar 
-                            id="start" 
-                            value={start} 
-                            onChange={(e) => setStart(e.value)} 
-                            timeOnly 
-                            hourFormat="24" 
-                            {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}
-                          />
-                        <label htmlFor="start" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Klukka byrja*</label>
-                        </span>
-                        {getFormErrorMessage(meta)}
-                      </div>
-                    )} />
-                  */

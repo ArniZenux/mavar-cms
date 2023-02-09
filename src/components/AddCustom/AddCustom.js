@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { Form, Field } from 'react-final-form';
 import { InputText } from 'primereact/inputtext';
 import { InputMask } from 'primereact/inputmask';
@@ -43,14 +43,14 @@ export function AddCustomForm() {
   }*/
   
   //eslint-disable-next-line} 
-  const [setShowMessage] = useState(false);
-  const [setFormData] = useState({});
+  //const [setShowMessage] = useState(false);
+  //const [setFormData] = useState({});
   
   const validate = (data) => {
     let errors = {};
 
-    if (!data.zname) {
-        errors.zname = 'Vantar fullt nafn';
+    if (!data.znamec) {
+        errors.znamec = 'Vantar fullt nafn';
     }
 
     if (!data.phonenr) {
@@ -100,16 +100,16 @@ export function AddCustomForm() {
       <div className="flex mb-5">
         <span className="text-xl text-900 font-medium">Bæta nýjan viðskiptavin</span>
       </div>
-         <Form onSubmit={onSubmit} initialValues={{ zname: '', phonenr: '', email: ''}} validate={validate} render={({ handleSubmit }) => (
+         <Form onSubmit={onSubmit} initialValues={{ znamec: '', phonenr: '', email: ''}} validate={validate} render={({ handleSubmit }) => (
             <form onSubmit={handleSubmit} className="p-fluid">
               <div className="grid formgrid">
                 <div className="field mb-4 col-12 md:col-12">
 
-                  <Field name="zname" render={({ input, meta }) => (
+                  <Field name="znamec" render={({ input, meta }) => (
                     <div className="field mt-4 col-12 md:col-12">
                       <span className="p-float-label">
-                        <InputText id="zname" {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
-                        <label htmlFor="zname" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Fullt nafn*</label>
+                        <InputText id="znamec" {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                        <label htmlFor="znamec" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Fullt nafn*</label>
                       </span>
                       {getFormErrorMessage(meta)}
                     </div>

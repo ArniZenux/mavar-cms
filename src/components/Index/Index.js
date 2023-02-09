@@ -1,30 +1,56 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
+import { classNames } from 'primereact/utils';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { Dropdown } from 'primereact/dropdown';
 import './DataTableDemo.css';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function Index() {
+  let emptyBeidni = {
+    id: null,
+    zdesc: '',
+    place : '',
+    zday: '',
+    start_time: '',
+    last_time: '',
+    explanation: '',
+    interpreter: '',
+    zstatus: 'Í vinnslu'
+  };
+
+  let interpreterData = [{
+    id: null,
+    zname : ''
+  }];
 
   const interval = useRef(0); 
 
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [product, setProduct] = useState(emptyBeidni);
   const [products, setProducts] = useState(null);
+  const [interpreter, setInterpreter] = useState(interpreterData);
+  const [submitted, setSubmitted] = useState(false);
+  const [productDialog, setProductDialog] = useState(false);
+  const [deleteProductDialog, setDeleteProductDialog] = useState(false);
   
   useEffect(() => {
-    interval.current = setInterval(() => { fetchBeidniData() } , 300);
+
+    interval.current = setInterval(() => { fetchBeidniData() } , 1000);
 
     async function fetchBeidniData(){
-      setLoading(true); 
       setError(null); 
-      let json; 
+      let json;
       
       try {
-        const result = await fetch(apiUrl + `/beidni/byBeidni`);
+        let url_beidni = apiUrl + `/beidnibokun/byBeidni`;
+        const result = await fetch(url_beidni);
    
         if(!result.ok){
           throw new Error('Ekki ok');
@@ -36,9 +62,6 @@ export function Index() {
         setError('Gat ekki sótt efni í vefþjónustu - Bilað í þjónustuna.');
         return; 
       }
-      finally{
-        setLoading(false); 
-      }
       setProducts(json);
      }
 
@@ -48,19 +71,32 @@ export function Index() {
   }
   },[]);
 
-  const changeFall = () => {
-    console.log("Breyta");
-  }
+  useEffect(() => {
+    async function fetchData(){
 
-  const renderButton1 = () => {
-    return (
-      <Link to={`/bokabeidni`}>
-        <Button label="Bóka" className="p-button-Info" onClick={changeFall}/> 
-      </Link>
-    )
-  }
-  
-  const button1 = renderButton1();
+      let json_interpreter; 
+
+      try {
+        let url_interpreter = apiUrl + '/tulkur/getName';
+        
+        const interpreterresult = await fetch(url_interpreter);
+        
+        if(!interpreterresult.ok){
+          throw new Error('Fetch data is not ok');
+        }
+        json_interpreter = await interpreterresult.json();
+        
+        console.log(json_interpreter);
+
+      }
+      catch(e){
+        console.warn('unable to fetch data', e); 
+        return; 
+      }
+      setInterpreter(json_interpreter); 
+     }
+     fetchData(); 
+  }, []); 
 
   if(error){
    return (
@@ -84,16 +120,102 @@ export function Index() {
     )
   } 
 
-  const editProduct = (product) => {
-    console.log("Breyta");
-    //setProduct({...product});
-    //setProductDialog(true);
+  const hideDialog = () => {
+    setSubmitted(false);
+    setProductDialog(false);
   }
 
-  const confirmDeleteProduct = (product) => {
-    console.log("Confirm");
-    //setProduct(product);
-    //setDeleteProductDialog(true);
+  const hideDeleteProductDialog = () => {
+    setDeleteProductDialog(false);
+  }
+
+  const hafnaProduct = async () => {
+    let zdata = [];
+    let success = true; 
+    let url = apiUrl + '/beidnibokun/hafnaBeidni';
+
+    zdata.push(product.id); 
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {"Content-Type": "application/json" },
+      body: JSON.stringify(zdata)
+    };
+    
+    success = await fetch(url, requestOptions);
+      
+    if(success){
+      //console.log('');
+    }
+    else {
+      console.error("Don't success");
+    }
+
+    setProductDialog(false);
+  }
+
+  const afbokaProduct = async () => {
+    let zdata = [];
+    let success = true; 
+    let url = apiUrl + '/beidnibokun/afbokaBeidni';
+
+    zdata.push(product.id); 
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {"Content-Type": "application/json" },
+      body: JSON.stringify(zdata)
+    };
+    
+    success = await fetch(url, requestOptions);
+      
+    if(success){
+      //console.log('');
+    }
+    else {
+      console.error("Don't success");
+    }
+
+    setProductDialog(false);
+  }
+  
+  const stadfestProduct = async () => {
+    let zdata = [];
+    let success = true; 
+    let url = apiUrl + '/beidnibokun/samtykktBeidni';
+
+    zdata.push(product.id); 
+    zdata.push(interpreter.zname);
+
+    const requestOptions = {
+      method: 'POST',
+      headers: {"Content-Type": "application/json" },
+      body: JSON.stringify(zdata)
+    };
+    
+    success = await fetch(url, requestOptions);
+      
+    if(success){
+      //console.log('');
+    }
+    else {
+      console.error("Don't success");
+    }
+
+    setProductDialog(false);
+  }
+
+  const editProduct = (product) => {
+    setProduct({...product});
+    setProductDialog(true);
+  }
+
+  const onInputChange = (e, name) => {
+    const val = (e.target && e.target.value) || '';
+    let _product = {...product};
+    _product[`${name}`] = val;
+
+    setProduct(_product);
   }
 
   const statusBodyTemplate = (rowData) => {
@@ -123,11 +245,26 @@ export function Index() {
       return (
         <React.Fragment>
           <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editProduct(rowData)} />
-          <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteProduct(rowData)} />
         </React.Fragment>
       );
     }
   }
+  
+  const productDialogFooter = (
+    <React.Fragment>
+      <Button label="Staðfesta" icon="pi pi-check" className="p-button-rounded p-button-success mr-2" onClick={stadfestProduct} />
+      <Button label="Afbóka" icon="pi pi-check" className="p-button-rounded p-button-warning" onClick={afbokaProduct} />
+      <Button label="Hafna" icon="pi pi-check" className="p-button-rounded p-button-danger mr-2" onClick={hafnaProduct} />
+      <Button label="Hætta" icon="pi pi-times" className="p-button-text " onClick={hideDialog} />
+    </React.Fragment>
+  );
+
+  const deleteProductDialogFooter = (
+    <React.Fragment>
+        <Button label="Nei" icon="pi pi-times" className="p-button-text" onClick={hideDeleteProductDialog} />
+        <Button label="Já" icon="pi pi-check" className="p-button-text" onClick={afbokaProduct} />
+    </React.Fragment>
+  );
 
   return (
     <div className="surface-card shadow-2 border-round p-4">
@@ -137,75 +274,64 @@ export function Index() {
       <DataTable value={products} editMode="row" dataKey="id" size="small" paginator rows={10} 
         responsiveLayout="scroll" emptyMessage="Engin beiðni ennþá skráð.">
         <Column field="zdesc" header="Heiti" style={{ width: '25%' }}></Column>
-        <Column field="place" header="Stadur" style={{ width: '10%' }}></Column>
-        <Column field="zday" header="Dagur" style={{ width: '10%' }}></Column>
-        <Column field="start_time" header="Byrja" style={{ width: '10%' }}></Column>
-        <Column field="last_time" header="Endir" style={{ width: '10%' }}></Column>
+        <Column field="place" header="Stadur" style={{ width: '15%' }}></Column>
+        <Column field="zday" header="Dagur" style={{ width: '7%' }}></Column>
+        <Column field="start_time" header="Byrja" style={{ width: '7%' }}></Column>
+        <Column field="last_time" header="Endir" style={{ width: '7%' }}></Column>
         <Column field="zstatus" header="Staða" body={statusBodyTemplate} style={{ minWidth: '5rem' }}></Column>
-        <Column field="zname" header="Hver pantar" style={{ width: '10%' }}></Column>
-        <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '8rem' }}></Column>
+        <Column field="znamec" header="Hver pantar" style={{ width: '10%' }}></Column>
+        <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '5rem' }}></Column>
       </DataTable>
+
+      <Dialog visible={productDialog} style={{ width: '650px' }} header="Breyta pöntun" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
+          
+          <div className="field">
+            <label htmlFor="place">Staður</label>
+            <InputText id="place" value={product.place} onChange={(e) => onInputChange(e, 'place')} required rows={3} cols={20} className={classNames({ 'p-invalid': submitted && !product.place })} />
+            {submitted && !product.place && <small className="p-error">Vantar staður.</small>}
+          </div>
+
+          <div className="field">
+            <label htmlFor="zdesc">Lýsing</label>
+            <InputTextarea id="zdesc" value={product.zdesc} autoResize  onChange={(e) => onInputChange(e, 'zdesc')} required rows={3} autoFocus className={classNames({ 'p-invalid': submitted && !product.zdesc })} />
+            {submitted && !product.zdesc && <small className="p-error">Vantar lýsing.</small>}
+          </div>
+
+          <div className="field">
+            <label htmlFor="zday">Dagur</label>
+            <InputText id="zday" value={product.zday} onChange={(e) => onInputChange(e, 'zday')} required rows={3} cols={10} autoFocus className={classNames({ 'p-invalid': submitted && !product.zday })} />
+            {submitted && !product.zday && <small className="p-error">Vantar dagur.</small>}
+          </div>
+
+          <div className="field">
+            <label htmlFor="start_time">Klukka byrjar</label>
+            <InputText id="start_time" type="time" value={product.start_time} onChange={(e) => onInputChange(e, 'start_time')} required rows={3} cols={10} autoFocus className={classNames({ 'p-invalid': submitted && !product.start_time })} />
+            {submitted && !product.start_time && <small className="p-error">Vantar klukka.</small>}
+          </div>
+
+          <div className="field">
+            <label htmlFor="last_time">Klukka endir</label>
+            <InputText id="last_time" type="time" value={product.last_time} onChange={(e) => onInputChange(e, 'last_time')} required rows={3} cols={10} autoFocus className={classNames({ 'p-invalid': submitted && !product.last_time })} />
+            {submitted && !product.last_time && <small className="p-error">Vantar klukka.</small>}
+          </div>
+
+          <div className="field">
+            <label htmlFor="dropdown">Túlkur</label>
+            <Dropdown inputId="dropdown" options={interpreter} optionLabel="zname" />
+            {submitted && !interpreter.zname && <small className="p-error">Vantar túlk.</small>}
+          </div>
+
+        </Dialog>
+
+        <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Afbókun" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
+  
+          <div className="confirmation-content">
+            <label htmlFor="zdesc"><b>{ product.zdesc }</b></label><br/><br/>
+            <span>Á að afbóka?</span>
+          </div>
+  
+        </Dialog>
     </div>
   )
 
-  /* return (
-
-    <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
-    <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
-      <div className="text-900 font-medium text-900 text-xl mb-3">Nýbeiðni um táknmálstúlk</div>
-        <div className="surface-card p-3 shadow-2 border-round p-fluid">
-    
-    <div className="surface-card shadow-2 border-round p-4">
-      <div className="flex mb-5">
-        <span className="text-xl text-900 font-medium">Beiðni sem um eftir túlk</span>
-      </div>
-      <ul className="list-none p-0 m-0">
-        <li className="flex flex-column md:flex-row md:align-items-center md:justify-content-between p-3 border-1 mb-3" style={{ borderRadius: '10px', backgroundColor: 'rgba(234,179,10,.1)', borderColor: 'rgba(234,179,10,.5)' }}>
-            <div>
-               <span className="text-yellow-700 font-bold ml-2">Dagtal: 12/03/23</span>
-            </div>
-            <div>
-               <span className="text-yellow-700 font-bold ml-2">Klukka byrjar: 10:00</span>
-            </div>
-            <div>
-               <span className="text-yellow-700 font-bold ml-2">Klukka endar: engin skráð</span>
-            </div>
-            <div className="flex align-items-center justify-content-between md:justify-content-end mt-3 md:mt-0">
-                <span className="bg-yellow-400 text-yellow-900 font-bold text-sm py-1 px-2" style={{ borderRadius: '10px' }}>Í biðstöðu</span>
-            </div>
-        </li>
-        
-        <li className="flex flex-column md:flex-row md:align-items-center md:justify-content-between p-3 border-1 mb-3" style={{ borderRadius: '10px', backgroundColor: 'rgba(33,197,94,.1)', borderColor: 'rgba(33,197,94,.5)' }}>              
-            <div>
-               <span className="text-yellow-700 font-bold ml-2">Dagtal: 12/03/23</span>
-            </div>
-            <div>
-               <span className="text-yellow-700 font-bold ml-2">Klukka byrjar: 10:00</span>
-            </div>
-            <div>
-               <span className="text-yellow-700 font-bold ml-2">Klukka endar: engin skráð</span>
-            </div>
-          <div className="flex align-items-center justify-content-between md:justify-content-end mt-3 md:mt-0">
-             <span className="bg-green-400 text-green-900 font-bold text-sm py-1 px-2" style={{ borderRadius: '10px' }}>Túlkur kemur</span>
-          </div>
-        </li>
-
-        <li className="flex flex-column md:flex-row md:align-items-center md:justify-content-between p-3 border-1 mb-3" style={{ borderRadius: '10px', backgroundColor: 'rgba(330,81,60,.1)', borderColor: 'rgba(330,81,60,.5)' }}>              
-            <div>
-               <span className="text-red-700 font-bold ml-2">Dagtal: 12/03/23</span>
-            </div>
-            <div>
-               <span className="text-red-700 font-bold ml-2">Klukka byrjar: 10:00</span>
-            </div>
-            <div>
-               <span className="text-red-700 font-bold ml-2">Klukka endar: engin skráð</span>
-            </div>
-            <div className="flex align-items-center justify-content-between md:justify-content-end mt-3 md:mt-0">
-             <span className="bg-red-400 text-red-900 font-bold text-sm py-1 px-2" style={{ borderRadius: '10px' }}>Engin laus</span>
-          </div>
-        </li>
-       </ul>
-    </div>
-    
-  );*/
 }

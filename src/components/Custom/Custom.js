@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 //import { Toast } from 'primereact/toast';
@@ -12,7 +12,6 @@ export function CustomList() {
   const [APIData, setAPIData] = useState([]);
   const [editingRows, setEditingRows] = useState({});
 
-  let success = true; 
 
   useEffect(() => {
     async function fetchData(){
@@ -48,6 +47,7 @@ export function CustomList() {
   const onRowEditComplete2 = async (e) => {
     let _APIData = [...APIData];
     let { newData, index } = e;
+    let success = true; 
 
     _APIData[index] = newData;
 
@@ -69,9 +69,10 @@ export function CustomList() {
         let url = apiUrl + '/custom/updatecustom/' + newData.id;
         
         success = await fetch(url, requestOptions);
-       
-        setAPIData(_APIData);
+        if(success){
+          setAPIData(_APIData);
         }
+       }
       }
       catch(e){
         console.log("Error", e);     
@@ -116,7 +117,7 @@ export function CustomList() {
         <div className="text-900 font-medium text-900 text-xl mb-3">Listi af viðskiptavinum</div>
           <div className="surface-card p-3 shadow-2 border-round p-fluid">
           <DataTable value={APIData} editMode="row" size='small' dataKey="id" editingRows={editingRows} onRowEditChange={onRowEditChange} onRowEditComplete={onRowEditComplete2} responsiveLayout="scroll">
-            <Column field="zname" header="Nafn" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
+            <Column field="znamec" header="Nafn" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
             <Column field="phonenr" header="Sími" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
             <Column field="email" header="Netfang" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
             <Column rowEditor headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>

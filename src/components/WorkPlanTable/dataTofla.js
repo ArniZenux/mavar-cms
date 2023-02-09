@@ -76,7 +76,7 @@ export function DataTofla( {id} ) {
           z_idverkefni = data.idverkefni;
 
           EventLists.push(eventsList);
-          console.log(EventLists); 
+          //console.log(EventLists); 
 
         });
        
@@ -84,7 +84,7 @@ export function DataTofla( {id} ) {
         console.warn("Error", e);     
       }
       setVerkefniData(json2);
-      console.log(z_idverkefni); 
+      //console.log(z_idverkefni); 
     }
   fetchTulkurData();
   },[id]);
@@ -108,7 +108,7 @@ export function DataTofla( {id} ) {
         allDay: zselectInfo.allDay,
         color: '#924ACE'
       }, true) // temporary=true, will get overwritten when reducer gives new events
-      console.log("id: " + id); 
+      /*console.log("id: " + id); 
       console.log("title " + title);
       console.log("start " + zselectInfo.startStr);
       console.log("end " + zselectInfo.endStr);
@@ -116,7 +116,7 @@ export function DataTofla( {id} ) {
       console.log("stadur", stadur); 
       console.log("startTime: ", start);
       console.log("endTime: ", last);
-      
+      */
       //const data =  { title, zselectInfo.startStr, zselectInfo.endStr, zselectInfo.allDay, id};
       //  let todayStr = new Date().toISOString().replace(/T.*$/, '') /
       let dag_byrja = zselectInfo.startStr; //"2023-01-17T13:00:00"; //'January 29, 2023 20:00:00';
@@ -128,7 +128,7 @@ export function DataTofla( {id} ) {
                       satt, 
                       id
                   };
-      console.log(data); 
+      //console.log(data); 
       const requestOptions = {
         method: 'POST',
         headers: {"Content-Type": "application/json" },
@@ -144,7 +144,7 @@ export function DataTofla( {id} ) {
     setProductDialog(false);
     setTitle('');
     setStadur('');
-    console.log(verkefniData);
+    //console.log(verkefniData);
   }
 
   const removeProduct = (zdeleteInfo) => {
@@ -182,7 +182,7 @@ export function DataTofla( {id} ) {
     let hour = new Date(e).getHours() ;
     let min = new Date(e).getMinutes();
     let start_time = `${hour}:${min}`; 
-    console.log(start_time); 
+    //console.log(start_time); 
   }
 
   return (

@@ -81,7 +81,7 @@ export function WorkPlanTable() {
                 value={selectedInterpreter} 
                 options={tulkurData} 
                 onChange={(e) => setSelectedInterpreter(e.value.id)}
-                optionLabel="nafn" 
+                optionLabel="zname" 
               />
             </div>
             <div className="field mb-4 col-12 md:col-10">

@@ -1,19 +1,13 @@
 import React, { useEffect, useState  } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-//import { Calendar } from "primereact/calendar";
-//import { Dropdown } from 'primereact/dropdown';
-//import { InputText } from 'primereact/inputtext';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function Project(  { id }  ) {
-  //let [day, setDay] = useState(new Date());
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
   const [APIData, setAPIData] = useState([]);
-  //const [editingRows, setEditingRows] = useState({});
-  //let success = true; 
 
   useEffect(() => {
       async function fetchData(){
@@ -21,17 +15,17 @@ export function Project(  { id }  ) {
       setError(null); 
 
       let json; 
-      //const apiUrlId = apiUrl + '/project';
-      //const url = new URL(id, apiUrlId); 
 
       try {
-        const result = await fetch(apiUrl + `/project`);
+        let url = apiUrl + '/project/allProject';
+        
+        const result = await fetch(url);
         
         if(!result.ok){
           throw new Error('Ekki ok');
         }
         json = await result.json();
-        console.log(json); 
+        //console.log(json); 
 
       }
       catch(e){
@@ -48,54 +42,6 @@ export function Project(  { id }  ) {
     fetchData(); 
   }, []);
  
-/*  const onRowEditComplete2 = async (e) => {
-    let _APIData = [...APIData];
-    let { newData, index } = e;
-
-    _APIData[index] = newData;
-
-    try {
-
-      if( newData.nafn === '' || newData.simi === '' || newData.netfang === '' ) {
-        console.log('Empty');
-      }
-       else {
-        const requestOptions = {
-          method: 'PUT',
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newData)
-        };
-        
-        success = await fetch(apiUrl + '/project/updateproject/' + newData.id, requestOptions);
-       
-        setAPIData(_APIData);
-        }
-      }
-      catch(e){
-        console.log("Error", e);     
-    }
-  }*/
-
-  /*const onRowEditChange = (e) => {
-    setEditingRows(e.data);
-  }*/
-
-  /*const textEditor = (options) => {
-    return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
-  }
-
-  const dateEditor = (options) => {
-    return <Calendar id="dagtal" value={day} onChange={(e) => setDay(e.target.value)} dateFormat="dd/mm/yy" mask="99/99/9999" />
-  }
-
-  const timeStartEditor = (options) => {
-    return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
-  }
-
-  const timeEndEditor = (options) => {
-    return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
-  }*/
-
   if(error){
     return (
       <div className="card">
@@ -125,14 +71,15 @@ export function Project(  { id }  ) {
       <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
         <div className="text-900 font-medium text-900 text-xl mb-3">Verkefnalisti</div>
           <div className="surface-card p-3 shadow-2 border-round p-fluid">
-            <DataTable value={APIData} editMode="row" dataKey="id"  responsiveLayout="scroll">
-              <Column field="heiti" header="Heiti" style={{ width: '20%' }}></Column>
-              <Column field="stadur" header="Stadur" style={{ width: '20%' }}></Column>
-              <Column field="dagur" header="Dagur" style={{ width: '10%' }}></Column>
-              <Column field="byrja_timi" header="Byrja" style={{ width: '10%' }}></Column>
-              <Column field="endir_timi" header="Endir" style={{ width: '10%' }}></Column>
-              <Column field="vettvangur" header="Vettvangur" style={{ width: '15%' }}></Column>
-              <Column field="nameuser" header="Hver pantar" style={{ width: '15%' }}></Column>
+            <DataTable value={APIData} editMode="row" dataKey="id" size="small" responsiveLayout="scroll">
+              <Column field="zname" header="Túlkur" style={{ width: '10%' }}></Column>
+              <Column field="title" header="Heiti" style={{ width: '30%' }}></Column>
+              <Column field="place" header="Stadur" style={{ width: '10%' }}></Column>
+              <Column field="zday" header="Dagur" style={{ width: '7%' }}></Column>
+              <Column field="start_time" header="Byrja" style={{ width: '7%' }}></Column>
+              <Column field="last_time" header="Endir" style={{ width: '7%' }}></Column>
+              <Column field="scene" header="Vettvangur" style={{ width: '10%' }}></Column>
+              <Column field="znamec" header="Hver pantar" style={{ width: '15%' }}></Column>
             </DataTable>
           </div>
         </div>
