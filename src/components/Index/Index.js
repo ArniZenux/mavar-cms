@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-//import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { classNames } from 'primereact/utils';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -42,7 +42,7 @@ export function Index() {
   
   useEffect(() => {
 
-    interval.current = setInterval(() => { fetchBeidniData() } , 1000);
+    interval.current = setInterval(() => { fetchBeidniData() } , 300);
 
     async function fetchBeidniData(){
       setError(null); 
@@ -218,6 +218,14 @@ export function Index() {
     setProduct(_product);
   }
 
+  const onInterpreterChange = (e, zname) => {
+    const val = (e.target && e.target.value) || '';
+    let _product = {...product};
+    _product[`${zname}`] = val;
+
+    setInterpreter(_product);
+  }
+
   const statusBodyTemplate = (rowData) => {
     if(rowData.zstatus === 0){
       return <span className={`product-badge status-${rowData.zstatus} pr-3 pl-3 pt-1 pb-1`}>Enginn laus</span>;
@@ -244,11 +252,13 @@ export function Index() {
     else{
       return (
         <React.Fragment>
-          <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editProduct(rowData)} />
+          <Button icon="pi pi-pencil" className="p-button-rounded p-button-success" onClick={editProduct} ></Button>
         </React.Fragment>
       );
     }
   }
+
+  //Link to={`/bokabeidni/` + rowData.id }/>
   
   const productDialogFooter = (
     <React.Fragment>
@@ -317,7 +327,7 @@ export function Index() {
 
           <div className="field">
             <label htmlFor="dropdown">Túlkur</label>
-            <Dropdown inputId="dropdown" options={interpreter} optionLabel="zname" />
+            <Dropdown inputId="dropdown" options={interpreter} onChange={onInterpreterChange} optionLabel="zname" placeholder='Veldu túlk' />
             {submitted && !interpreter.zname && <small className="p-error">Vantar túlk.</small>}
           </div>
 
