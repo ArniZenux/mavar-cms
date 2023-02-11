@@ -112,18 +112,16 @@ export function CustomList() {
   }
 
   return (
-    <div className="flex-wrap justify-content-center" style={{ margin: '0 auto' }}>
-      <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
-        <div className="text-900 font-medium text-900 text-xl mb-3">Listi af viðskiptavinum</div>
-          <div className="surface-card p-3 shadow-2 border-round p-fluid">
-          <DataTable value={APIData} editMode="row" size='small' dataKey="id" editingRows={editingRows} onRowEditChange={onRowEditChange} onRowEditComplete={onRowEditComplete2} responsiveLayout="scroll">
-            <Column field="znamec" header="Nafn" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
-            <Column field="phonenr" header="Sími" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
-            <Column field="email" header="Netfang" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
-            <Column rowEditor headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
-          </DataTable>
-        </div>
+    <div className="surface-card shadow-2 border-round p-4">
+      <div className="flex mb-5">
+        <span className="text-xl text-900 font-medium">Listi af viðskiptavinum</span>
       </div>
+      <DataTable value={APIData} editMode="row" size='small' dataKey="id" editingRows={editingRows} onRowEditChange={onRowEditChange} onRowEditComplete={onRowEditComplete2} responsiveLayout="scroll">
+        <Column field="znamec" header="Nafn" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
+        <Column field="phonenr" header="Sími" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
+        <Column field="email" header="Netfang" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
+        <Column rowEditor headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}></Column>
+      </DataTable>
     </div>
   )
 }

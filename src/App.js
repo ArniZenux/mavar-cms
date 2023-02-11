@@ -6,26 +6,20 @@ import { Home } from './pages/home';
 import { Tulkur } from './pages/tulkur';
 import { AddInterpreter } from './pages/addInterpreter';
 import { InterpreterProjectList } from './pages/interpreterProjectList';
-
 import { Custom } from './pages/customs';
 import { AddCustom } from './pages/addCustom';
-
 import { ProjectList } from './pages/projectList';
 import { AddProject } from './pages/addproject';
 import { ChangeProject } from './pages/changeProject';
-import { ChangeProjectOne } from './pages/changeProjectLink';
-
-import { DeleteProject } from './pages/deleteProject';
+//import { ChangeProjectOne } from './pages/changeProjectLink';
+//import { DeleteProject } from './pages/deleteProject';
 import { StadaProject } from './pages/stadaProject';
-
 import { WorkPlanT } from './pages/workPlan';
-
+import { Bookproject } from './pages/bookproject.js';  //change to bookRequest
 import { NotFound } from './pages/404';
-
 import { Login } from './pages/login';
 import { Register } from './pages/register';
 import { Reset } from './pages/reset';
-
 import { UserContext } from './context/UserContext';
 
 import 'primereact/resources/themes/saga-blue/theme.css';
@@ -75,12 +69,11 @@ function App() {
             <Route exact path="/verkefnalisti" element={<ProjectList />} />
             <Route exact path="/nyttverkefni" element={<AddProject />} />
             <Route exact path="/breytaverkefni" element={<ChangeProject />} />
-            <Route exact path="/eydaverkefni" element={<DeleteProject />} />
             <Route exact path="/stadaverkefni" element={<StadaProject />} />
             
             <Route exact path="/workplan" element={<WorkPlanT />} />
             
-            <Route exact path="/bokabeidni" element={<ChangeProjectOne />} />
+            <Route exact path="/bokabeidni/:id" element={<Bookproject />} />
             
             <Route path="*" element={<NotFound/> } />
           </Routes>
@@ -91,3 +84,5 @@ function App() {
 }
 
 export default App;
+
+//<Route exact path="/eydaverkefni" element={<DeleteProject />} />

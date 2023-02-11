@@ -109,24 +109,22 @@ export function InterpreterProject(  ) {
   }
 
   return (
-    <div className="flex-wrap justify-content-center">
-      <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
-        <div className="text-900 font-medium text-900 text-xl mb-3">Verkefnalisti túlka</div>
-          <div className="surface-card p-3 shadow-2 border-round p-fluid">
-            <DataTable value={APIData} paginator rows={20} filters={filters1} size="small" filterDisplay="menu" 
-              className="p-datatable-customers" loading={loading1} dataKey="id"  responsiveLayout="scroll"
-              globalFilterFields={['zname']} header={header1} emptyMessage="Enginn túlkur finnst.">
-              <Column field="zname" header="Túlkur" style={{ width: '10%' }}></Column>
-              <Column field="title" header="Heiti" style={{ width: '30%' }}></Column>
-              <Column field="place" header="Stadur" style={{ width: '10%' }}></Column>
-              <Column field="zday" header="Dagur" style={{ width: '7%' }}></Column>
-              <Column field="start_time" header="Byrja" style={{ width: '7%' }}></Column>
-              <Column field="last_time" header="Endir" style={{ width: '7%' }}></Column>
-              <Column field="scene" header="Vettvangur" style={{ width: '10%' }}></Column>
-              <Column field="znamec" header="Hver pantar" style={{ width: '15%' }}></Column>
-            </DataTable>
-          </div>
-        </div>
+    <div className="surface-card shadow-2 border-round p-4">
+      <div className="flex mb-5">
+        <span className="text-xl text-900 font-medium">Verkefnalisti túlka</span>
       </div>
+        <DataTable value={APIData} paginator rows={20} filters={filters1} size="small" filterDisplay="menu" 
+          className="p-datatable-customers" loading={loading1} dataKey="id"  responsiveLayout="scroll"
+          globalFilterFields={['zname']} header={header1} emptyMessage="Enginn túlkur finnst.">
+          <Column field="zname" header="Túlkur" style={{ width: '10%' }}></Column>
+          <Column field="title" header="Heiti" style={{ width: '30%' }}></Column>
+          <Column field="place" header="Stadur" style={{ width: '10%' }}></Column>
+          <Column field="zday" header="Dagur" style={{ width: '7%' }}></Column>
+          <Column field="start_time" header="Byrja" style={{ width: '7%' }}></Column>
+          <Column field="last_time" header="Endir" style={{ width: '7%' }}></Column>
+          <Column field="scene" header="Vettvangur" style={{ width: '10%' }}></Column>
+          <Column field="znamec" header="Hver pantar" style={{ width: '15%' }}></Column>
+        </DataTable>
+    </div>
   )
 }

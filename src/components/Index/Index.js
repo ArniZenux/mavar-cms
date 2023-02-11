@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import { classNames } from 'primereact/utils';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -8,6 +8,7 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
+//import { Toast } from 'primereact/toast';
 import './DataTableDemo.css';
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -31,11 +32,13 @@ export function Index() {
   }];
 
   const interval = useRef(0); 
+  //const toast = useRef(null);
 
   const [error, setError] = useState(null);
   const [product, setProduct] = useState(emptyBeidni);
   const [products, setProducts] = useState(null);
   const [interpreter, setInterpreter] = useState(interpreterData);
+  const [interpreterOne, setInterpreterOne] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [productDialog, setProductDialog] = useState(false);
   const [deleteProductDialog, setDeleteProductDialog] = useState(false);
@@ -120,9 +123,23 @@ export function Index() {
     )
   } 
 
+  /*const showStadfest = () => {
+    toast.current.show({severity:'success', summary: 'Staðfesting', detail:'Verkefni er staðfest og er skráð', life: 3000});
+  }
+
+  const showHafna = () => {
+    toast.current.show({severity:'error', summary: 'Höfnun', detail:'Verkefni er hafnað og er ekki skráð', life: 3000});
+  }
+  
+  const showAfbokun = () => {
+    toast.current.show({severity:'warn', summary: 'Afbókun', detail:'Verkefni er afbókað og er ekki skráð', life: 3000});
+  }*/
+
   const hideDialog = () => {
     setSubmitted(false);
     setProductDialog(false);
+    setInterpreterOne(null); 
+    opinBeidni(); 
   }
 
   const hideDeleteProductDialog = () => {
@@ -130,6 +147,7 @@ export function Index() {
   }
 
   const hafnaProduct = async () => {
+    //showHafna();
     let zdata = [];
     let success = true; 
     let url = apiUrl + '/beidnibokun/hafnaBeidni';
@@ -145,16 +163,18 @@ export function Index() {
     success = await fetch(url, requestOptions);
       
     if(success){
-      //console.log('');
+      console.log('');
     }
     else {
       console.error("Don't success");
     }
 
     setProductDialog(false);
+    opinBeidni(); 
   }
 
   const afbokaProduct = async () => {
+    //showAfbokun();
     let zdata = [];
     let success = true; 
     let url = apiUrl + '/beidnibokun/afbokaBeidni';
@@ -170,23 +190,27 @@ export function Index() {
     success = await fetch(url, requestOptions);
       
     if(success){
-      //console.log('');
+      console.log('');
     }
     else {
       console.error("Don't success");
     }
 
     setProductDialog(false);
+    opinBeidni(); 
   }
   
   const stadfestProduct = async () => {
+    //showStadfest();
     let zdata = [];
     let success = true; 
     let url = apiUrl + '/beidnibokun/samtykktBeidni';
 
     zdata.push(product.id); 
-    zdata.push(interpreter.zname);
+    zdata.push(interpreterOne.zname);
 
+    console.log(zdata); 
+    
     const requestOptions = {
       method: 'POST',
       headers: {"Content-Type": "application/json" },
@@ -196,17 +220,46 @@ export function Index() {
     success = await fetch(url, requestOptions);
       
     if(success){
-      //console.log('');
+      console.log('');
     }
     else {
       console.error("Don't success");
     }
 
     setProductDialog(false);
+    opinBeidni(); 
+  }
+
+  const opinBeidni = async () => {
+    let zdata = [];
+    let success = true; 
+    const change = 1; 
+    let url = apiUrl + '/beidnibokun/opinBeidni';
+
+    zdata.push(product.id); 
+    zdata.push(change);
+
+    console.log(zdata); 
+    
+    const requestOptions = {
+      method: 'POST',
+      headers: {"Content-Type": "application/json" },
+      body: JSON.stringify(zdata)
+    };
+    
+    success = await fetch(url, requestOptions);
+      
+    if(success){
+      console.log('');
+    }
+    else {
+      console.error("Don't success");
+    }
   }
 
   const editProduct = (product) => {
     setProduct({...product});
+    setInterpreterOne(null); 
     setProductDialog(true);
   }
 
@@ -218,13 +271,17 @@ export function Index() {
     setProduct(_product);
   }
 
-  const onInterpreterChange = (e, zname) => {
+  const onInputInterpreter = (e) => {
+    setInterpreterOne(e.value); 
+  }
+
+  /*const onInterpreterChange = (e, zname) => {
     const val = (e.target && e.target.value) || '';
     let _product = {...product};
     _product[`${zname}`] = val;
 
     setInterpreter(_product);
-  }
+  }*/
 
   const statusBodyTemplate = (rowData) => {
     if(rowData.zstatus === 0){
@@ -252,12 +309,16 @@ export function Index() {
     else{
       return (
         <React.Fragment>
-          <Button icon="pi pi-pencil" className="p-button-rounded p-button-success" onClick={editProduct} ></Button>
+          <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2"  onClick={() => editProduct(rowData)} />
         </React.Fragment>
+         
       );
     }
   }
-
+/*
+ <React.Fragment>
+            <Link to={'/bokabeidni/' + rowData.id}><Button icon="pi pi-pencil" className='p-button-success p-button-rounded'/> </Link>
+          </React.Fragment>*/
   //Link to={`/bokabeidni/` + rowData.id }/>
   
   const productDialogFooter = (
@@ -327,7 +388,7 @@ export function Index() {
 
           <div className="field">
             <label htmlFor="dropdown">Túlkur</label>
-            <Dropdown inputId="dropdown" options={interpreter} onChange={onInterpreterChange} optionLabel="zname" placeholder='Veldu túlk' />
+            <Dropdown inputId="dropdown" value={interpreterOne} options={interpreter} onChange={onInputInterpreter} optionLabel="zname" placeholder='Veldu túlk' />
             {submitted && !interpreter.zname && <small className="p-error">Vantar túlk.</small>}
           </div>
 

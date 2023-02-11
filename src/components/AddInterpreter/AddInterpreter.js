@@ -76,7 +76,7 @@ export function AddInterpreterForm() {
   return (
     <div className="surface-card shadow-2 border-round p-4">
       <div className="flex mb-5">
-        <span className="text-xl ml-2 text-900 font-medium">Bæta nýjan táknmálstúlk</span>
+        <span className="text-xl text-900 font-medium">Bæta nýjan táknmálstúlk</span>
       </div>
           <Form onSubmit={onSubmit} initialValues={{ zname: '', phonenr: '', email: '', zstatus: 'Virkur' }} validate={validate} render={({ handleSubmit }) => (
             <form onSubmit={handleSubmit} className="p-fluid">
