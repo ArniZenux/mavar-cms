@@ -67,12 +67,12 @@ export function InterpreterProject(  ) {
 
   const renderHeader1 = () => {
     return (
-        <div className="flex justify-content-end">
-            <span className="p-input-icon-left">
-                <i className="pi pi-search" />
-                <InputText value={globalFilterValue1} onChange={onGlobalFilterChange1} placeholder="Leita túlk" style={{ width: '20%' }}/>
-            </span>
-        </div>
+      <div className="flex">
+        <span className="p-input-icon-left">
+          <i className="pi pi-search" />
+          <InputText value={globalFilterValue1} onChange={onGlobalFilterChange1} placeholder="Leita túlk" style={{ width: '100%' }}/>
+        </span>
+      </div>
     )
   }
 

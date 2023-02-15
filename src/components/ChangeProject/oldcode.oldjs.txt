@@ -1,0 +1,288 @@
+/*return (
+  <div className="surface-card shadow-2 border-round p-4">
+    <div className="flex mb-5">
+      <span className="text-xl ml-2 text-900 font-medium">Breyta verkefni</span>
+    </div>
+
+    <Toast ref={toast} />
+      <DataTable ref={df} value={APIData} editMode="row" size='small' dataKey="id" responsiveLayout="scroll"> 
+        <Column field="zname" header="Túlkur" style={{ width: '8%' }}></Column>
+        <Column field="title" header="Heiti" style={{ width: '25%' }}></Column>
+        <Column field="place" header="Stadur" style={{ width: '10%' }}></Column>
+        <Column field="zday" header="Dagur" style={{ width: '4%' }}></Column>
+        <Column field="start_time" header="Byrja" style={{ width: '4%' }}></Column>
+        <Column field="last_time" header="Endir" style={{ width: '4%' }}></Column>
+        <Column field="scene" header="Vettvangur" style={{ width: '6%' }}></Column>
+        <Column field="znamec" header="Hver pantar" style={{ width: '10%' }}></Column>
+        <Column body={renderButton1} exportable={false} style={{ width: '5%' }}></Column>
+      </DataTable>
+
+      <Dialog visible={productDialog} style={{ width: '1000px', height:'790px' }} header="Breyta verkefnalýsing" modal className="p-fluid" footer={productDialogFooter} onHide={hideProductDialog}>
+      <Form onSubmit={onSubmit} initialValues={{ heiti: '', hver: '', stadur: '', dropdown: '', dropdown2: '', day: '', start: '', last: ''}} validate={validate} render={({ handleSubmit }) => (
+            <form onSubmit={handleSubmit} className="p-fluid">
+              <div className="grid formgrid">
+                <div className="field mb-4 col-12 md:col-6">
+
+                  <Field name="lysing" render={({ input, meta }) => (
+                    <div className="field mt-4 col-12 md:col-12">
+                      <span className="label">
+                        <label htmlFor="heiti" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Lýsing*</label>
+                        <InputTextarea 
+                          id="heiti" 
+                          value={product.heiti} 
+                          autoResize 
+                          rows={3} 
+                          className={classNames({ 'p-invalid': isFormFieldValid(meta) })} 
+                        />
+                      </span>
+                      {getFormErrorMessage(meta)}
+                    </div>
+                  )} />
+                  
+                  <Field name="hver" render={({ input, meta }) => (
+                    <div className="field mt-5 col-12 md:col-12">
+                      <span className="label">
+                        <label htmlFor="hver" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Hver pantar*</label>
+                        <InputText 
+                          id="hver" 
+                          value={product.nameuser} 
+                          className={classNames({ 'p-invalid': isFormFieldValid(meta) })} 
+                        />
+                      </span>
+                      {getFormErrorMessage(meta)}
+                    </div>
+                  )} />
+                  
+                  <Field name="stadur" render={({ input, meta }) => (
+                    <div className="field mt-5 col-12 md:col-12">
+                      <span className="p-label">
+                        <label htmlFor="stadur" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Hvar er staður*</label>
+                        <InputText 
+                          id="stadur" 
+                          value={product.stadur} 
+                          className={classNames({ 'p-invalid': isFormFieldValid(meta) })} 
+                        />
+                      </span>
+                      {getFormErrorMessage(meta)}
+                    </div>
+                  )} />
+                  
+                  <Field name="dropdown" render={({ input, meta }) => (
+                    <div className="field mt-5 col-12 md:col-12">
+                      <span className="p-label">
+                      <label htmlFor="dropdown" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Vettvangur*</label>
+                        <Dropdown 
+                          inputId="dropdown" 
+                          value={product.vettvangur} 
+                          valueTemplate={product.vettvangur}
+                          placeholder={product.vettvangur}
+                          options={vettvangalist} 
+                          optionLabel="name" 
+                          className={classNames({ 'p-invalid': isFormFieldValid(meta) })} 
+                        />
+                       
+                      </span>
+                      {getFormErrorMessage(meta)}
+                    </div>
+                  )} />
+
+                  <Field name="dropdown2" render={({ input, meta }) => (
+                    <div className="field mt-5 col-12 md:col-12">
+                      <span className="p-label">
+                        <label htmlFor="dropdown2" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Túlkur*</label>
+                        <Dropdown 
+                          inputId="dropdown2" 
+                          valueTemplate={product.tulkur}
+                          placeholder={product.tulkur}
+                          options={tulkaJson} 
+                          optionLabel="name" 
+                          className={classNames({ 'p-invalid': isFormFieldValid(meta) })} 
+                        />
+                      </span>
+                      {getFormErrorMessage(meta)}
+                    </div>
+                  )} />
+                
+                </div>
+
+                <div className="field mb-4 col-12 md:col-6">
+                  <Field name="dagtal" render={({ input, meta }) => (
+                    <div className="field md:mt-4 col-12 md:col-12">
+                      <span className="p-label">
+                        <label htmlFor="Dagtal">Dagtal*</label>
+                        <Calendar 
+                            id="dagtal"
+                            value={day}
+                            onChange={(e) => setDay(e.value)}
+                            dateFormat="dd/mm/yy" 
+                            inline
+                            {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}
+                          />
+                      </span>    
+                      {getFormErrorMessage(meta)}
+                    </div>
+                  )} />
+                  
+                  <Field name="byrja_timi" render={({ input, meta }) => (
+                    <div className="field mt-5 col-12 md:col-12">
+                      <span className="p-label">
+                      <label htmlFor="byrja_timi" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Klukka byrja*</label>
+                      <Calendar 
+                          id="byrja_timi" 
+                          value={byrja_timi} 
+                          placeholder={product.byrja_timi}
+                          onChange={(e) => setByrjaTimi(e.value)} 
+                          timeOnly
+                          hourFormat="24" 
+                          {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}
+                        />
+                      </span>
+                      {getFormErrorMessage(meta)}
+                    </div>
+                  )} />
+
+                  <Field name="last" render={({ input, meta }) => (
+                    <div className="field mt-5 col-12 md:col-12">
+                      <span className="p-label">
+                      <label htmlFor="last" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Klukka endir*</label>
+                      <Calendar 
+                          id="endir_timi" 
+                          value={endir_timi}
+                          placeholder={product.endir_timi} 
+                          onChange={(e) => setEndirTimi(e.value)} 
+                          timeOnly
+                          hourFormat="24" 
+                          {...input}  className={classNames({ 'p-invalid': isFormFieldValid(meta) })}
+                        />
+                      </span>
+                      {getFormErrorMessage(meta)}
+                    </div>
+                  )} />
+              
+                </div>
+              </div>
+           </form>
+        )} />
+      </Dialog>
+
+      <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Staðfest að eyða" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
+        <div className="confirmation-content">
+            <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem'}} />
+            { product && <span>Staðfest að eyða verkefni <b> {product.heiti}</b> ?</span> }
+        </div>
+      </Dialog>
+    </div>
+)*/
+
+
+/*  const onRowEditComplete2 = async (e) => {
+  let _APIData = [...APIData];
+  let { newData, index } = e;
+
+  _APIData[index] = newData;
+
+  try {
+
+    if( newData.nafn === '' || newData.simi === '' || newData.netfang === '' ) {
+      console.log('Empty');
+    }
+     else {
+      const requestOptions = {
+        method: 'PUT',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newData)
+      };
+      
+      success = await fetch(apiUrl + '/project/updateproject/' + newData.id, requestOptions);
+     
+      setAPIData(_APIData);
+      }
+    }
+    catch(e){
+      console.log("Error", e);     
+  }
+  /*  const onRowEditComplete2 = async (e) => {
+  let _APIData = [...APIData];
+  let { newData, index } = e;
+
+  _APIData[index] = newData;
+
+  try {
+
+    if( newData.nafn === '' || newData.simi === '' || newData.netfang === '' ) {
+      console.log('Empty');
+    }
+     else {
+      const requestOptions = {
+        method: 'PUT',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newData)
+      };
+      
+      success = await fetch(apiUrl + '/project/updateproject/' + newData.id, requestOptions);
+     
+      setAPIData(_APIData);
+      }
+    }
+    catch(e){
+      console.log("Error", e);     
+  }
+}*/
+
+/*const onRowEditChange = (e) => {
+  setEditingRows(e.data);
+}*/
+
+/*const textEditor = (options) => {
+  return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
+}
+
+const dateEditor = (options) => {
+  return <Calendar id="dagtal" value={day} onChange={(e) => setDay(e.target.value)} dateFormat="dd/mm/yy" mask="99/99/9999" />
+}
+
+const timeStartEditor = (options) => {
+  return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
+}
+
+const timeEndEditor = (options) => {
+  return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
+}*/
+
+/*const validate = (data) => {
+  let errors = {};
+
+  if (!data.lysing) {
+    errors.lysing = 'Það vantar lýsing verkefna?';
+  }
+
+  if (!data.hver) {
+    errors.hver = 'Hver er nafn sem pantar túlk?';
+  }
+
+  if (!data.stadur) {
+    errors.stadur = 'Hvar er staður?';
+  }
+  
+  if(!data.dropdown){
+    errors.dropdown = 'Hvernig er vettvangur verkefna?';
+  }
+
+  if(!data.dropdown2){
+    errors.dropdown2 = 'Það vantar túlk?';
+  }
+
+  if (!data.dagtal) {
+      errors.dagtal = 'Hvaða er dagur?';
+  }
+
+  if (!data.start) {
+      errors.start = 'Hvenær byrjar verkefni?';
+  }
+  
+  if (!data.last) {
+    errors.last = 'Hvenær er verkefni búið?';
+  }
+
+  return errors;
+};*/
