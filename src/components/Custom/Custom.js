@@ -1,29 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-//import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
+import { UserContext } from '../../context/UserContext';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function CustomList() {
+  const [ userContext ] = useContext(UserContext);
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
   const [APIData, setAPIData] = useState([]);
   const [editingRows, setEditingRows] = useState({});
 
-
   useEffect(() => {
     async function fetchData(){
       setLoading(true); 
       setError(null); 
-
       let json; 
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userContext.token}`,
+        },
+      }
 
       try {
         let url = apiUrl + `/custom`;
-        const result = await fetch(url); 
-        console.log(result);
+        const result = await fetch(url, requestOptions); 
         
         if(!result.ok){
           throw new Error('Ekki ok');
@@ -53,16 +58,16 @@ export function CustomList() {
 
     try {
       
-      //console.log(newData)
-      //console.log(newData.id);
-
-      if( newData.zname === '' || newData.phonenr === '' || newData.email === '' ) {
+      if( newData.znamec === '' || newData.phonenr === '' || newData.email === '' ) {
         console.log('Empty');
       }
        else {
         const requestOptions = {
           method: 'POST',
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userContext.token}`,
+          },
           body: JSON.stringify(newData)
         };
 
@@ -86,7 +91,7 @@ export function CustomList() {
   const textEditor = (options) => {
     return <InputText type="text" value={options.value} onChange={(e) => options.editorCallback(e.target.value)} />;
   }
-
+  
   if(error){
     return (
       <div className="card">
@@ -103,7 +108,7 @@ export function CustomList() {
     )
   }
 
-  if( APIData.length === 0){
+  if(APIData.length === 0){
      return (
       <div className="card">
           <div className="text-900 text-3xl font-medium mb-3">Engir viðskiptavinir...</div>
@@ -116,7 +121,7 @@ export function CustomList() {
       <div className="flex mb-5">
         <span className="text-xl text-900 font-medium">Listi af viðskiptavinum</span>
       </div>
-      <DataTable value={APIData} editMode="row" size='small' dataKey="id" editingRows={editingRows} onRowEditChange={onRowEditChange} onRowEditComplete={onRowEditComplete2} responsiveLayout="scroll">
+      <DataTable value={APIData} editMode="row" dataKey="id" size='small' editingRows={editingRows} onRowEditChange={onRowEditChange} onRowEditComplete={onRowEditComplete2} responsiveLayout="scroll">
         <Column field="znamec" header="Nafn" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
         <Column field="phonenr" header="Sími" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>
         <Column field="email" header="Netfang" editor={(options) => textEditor(options)} style={{ width: '20%' }}></Column>

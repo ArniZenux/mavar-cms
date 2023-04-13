@@ -11,8 +11,6 @@ import { AddCustom } from './pages/addCustom';
 import { ProjectList } from './pages/projectList';
 import { AddProject } from './pages/addproject';
 import { ChangeProject } from './pages/changeProject';
-//import { ChangeProjectOne } from './pages/changeProjectLink';
-//import { DeleteProject } from './pages/deleteProject';
 import { StadaProject } from './pages/stadaProject';
 import { WorkPlanT } from './pages/workPlan';
 import { Bookproject } from './pages/bookproject.js';  //change to bookRequest
@@ -42,13 +40,13 @@ function App() {
     verifyUser();
   }, [verifyUser]);
 
-  return userContext.token ? (
+  return !userContext.token ? (
     <div>
        <BrowserRouter>
           <Routes>
             <Route exact path="/" element={<Login />} />
-            <Route exact path="/register" element={<Register />} />
-            <Route exact path="/reset" element={<Reset />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/reset" element={<Reset />} />
             <Route path="*" element={<NotFound/> } />
           </Routes>
       </BrowserRouter>
@@ -59,22 +57,17 @@ function App() {
         <Layout>
           <Routes>
             <Route exact path="/" element={<Home />} />
-            <Route exact path="/tulkaverkefni" element={<InterpreterProjectList />} />
-            <Route exact path="/tulkur" element={<Tulkur />} />
-            <Route exact path="/nyrtulkur" element={<AddInterpreter />} />
-
-            <Route exact path="/vidskiptavinir" element={<Custom />} />
-            <Route exact path="/nyrvidskiptavinur" element={<AddCustom />} />
-
-            <Route exact path="/verkefnalisti" element={<ProjectList />} />
-            <Route exact path="/nyttverkefni" element={<AddProject />} />
-            <Route exact path="/breytaverkefni" element={<ChangeProject />} />
-            <Route exact path="/stadaverkefni" element={<StadaProject />} />
-            
-            <Route exact path="/workplan" element={<WorkPlanT />} />
-            
-            <Route exact path="/bokabeidni/:id" element={<Bookproject />} />
-            
+            <Route path="/tulkaverkefni" element={<InterpreterProjectList />} />
+            <Route path="/tulkur" element={<Tulkur />} />
+            <Route path="/nyrtulkur" element={<AddInterpreter />} />
+            <Route path="/vidskiptavinir" element={<Custom />} />
+            <Route path="/nyrvidskiptavinur" element={<AddCustom />} />
+            <Route path="/verkefnalisti" element={<ProjectList />} />
+            <Route path="/nyttverkefni" element={<AddProject />} />
+            <Route path="/breytaverkefni" element={<ChangeProject />} />
+            <Route path="/stadaverkefni" element={<StadaProject />} />
+            <Route path="/workplan" element={<WorkPlanT />} />
+            <Route path="/bokabeidni/:id" element={<Bookproject />} />
             <Route path="*" element={<NotFound/> } />
           </Routes>
         </Layout>
@@ -84,5 +77,3 @@ function App() {
 }
 
 export default App;
-
-//<Route exact path="/eydaverkefni" element={<DeleteProject />} />

@@ -1,19 +1,52 @@
 import { NavLink } from 'react-router-dom';
-import React, {useContext, useRef } from 'react';
+import React, {useCallback, useEffect, useContext, useRef } from 'react';
 import { StyleClass } from 'primereact/styleclass';
 import { Ripple } from 'primereact/ripple';
 import mavarlogo2 from '../../utils/Images/brid2.jpg';
 import { UserContext } from '../../context/UserContext';
 
-export const Navigation = () => {
+const apiUrl = process.env.REACT_APP_API_URL;
 
+export const Navigation = () => {
 const [ userContext, setUserContext] = useContext(UserContext);
-  
 const btnRef1 = useRef(null);
 const btnRef2 = useRef(null);
 const btnRef3 = useRef(null);
 const btnRef4 = useRef(null);
 const btnRef5 = useRef(null);
+
+const fetchUserData = useCallback(() => {
+  let url = apiUrl +  '/admin';
+
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${userContext.token}`,
+    },
+  }
+  fetch(url, requestOptions)
+    .then(async res => {
+        let datajson = await res.json();
+        console.log(datajson); 
+        setUserContext(oldValues => {
+          return { ...oldValues, details: datajson}
+      })
+    })
+    .catch(err => {
+      console.err('Error response', err);
+      setUserContext(oldValues => {
+        return { ...oldValues, details: null}
+      }) 
+    })
+  },[setUserContext, userContext.token]);
+
+useEffect(() => {
+  if(!userContext.details){
+    fetchUserData();
+  }
+},[userContext.details, fetchUserData]);
+
 
 const logoutHandler = () => {
   //localStorage.removeItem('user');
@@ -22,7 +55,12 @@ const logoutHandler = () => {
   });
 }
 
-console.log('header', userContext);
+let _name =  '';
+  if( userContext !== null){
+    if(userContext.details){
+      _name = userContext.details.data.username;
+    }
+  }
 
 //eslint-disable
 return (
@@ -160,7 +198,7 @@ return (
         <li>
           <div className="p-ripple flex px-6 p-3 lg:px-3 lg:py-2 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-colors transition-duration-150 w-full" to={`/check`}>
             <i className="pi pi-user mr-2"></i>
-            <span className="font-medium">Sara (Stjórandi)</span>
+            <span className="font-medium"> {_name} </span>
             <Ripple />
           </div>
         </li>

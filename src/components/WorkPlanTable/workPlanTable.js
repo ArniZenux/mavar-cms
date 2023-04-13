@@ -1,10 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { ListBox } from 'primereact/listbox';
 import { DataTofla } from './dataTofla';
+import { UserContext } from '../../context/UserContext';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function WorkPlanTable() {
+  const [ userContext ] = useContext(UserContext);
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
   const [tulkurData, setTulkurData] = useState([]);
@@ -14,11 +16,18 @@ export function WorkPlanTable() {
     async function fetchTulkurData(){
         setLoading(true); 
         setError(null); 
-  
+        const requestOptions = {
+          method: 'GET',
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userContext.token}`,
+          },
+        }
         let json; 
   
         try {
-          const tulkur_result = await fetch(apiUrl + `/tulkur`); 
+          let url = apiUrl + `/tulkur`;
+          const tulkur_result = await fetch(url, requestOptions); 
 
           if(!tulkur_result.ok){
             throw new Error('Ekki ok');
@@ -72,7 +81,7 @@ export function WorkPlanTable() {
   }
 
   return (
-    <div className="flex-wrap justify-content-center" style={{ margin: '0 auto', width: '70%' }}>
+    <div className="flex-wrap justify-content-center" style={{ margin: '0 auto', width: '85%', height:'80%' }}>
       <div className="surface-ground px-0 py-3 md:px-1 lg:px-1">
           <div className="surface-card p-3 shadow-2 border-round p-fluid">
           <div className="grid formgrid">

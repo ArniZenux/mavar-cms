@@ -1,51 +1,16 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Form, Field } from 'react-final-form';
 import { InputText } from 'primereact/inputtext';
 import { InputMask } from 'primereact/inputmask';
 import { Button } from 'primereact/button';
 import { classNames } from 'primereact/utils';
+import { UserContext } from '../../context/UserContext';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function AddCustomForm() {
-  /*const [firstname, setFirstName] = useState('');
-  const [phonenr, setPhoneNr] = useState('');
-  const [email, setEmail] = useState('');
-  const onFirstnameChange = e => setFirstName(e.target.value); 
-  const onPhonenrChange = e => setPhoneNr(e.target.value); 
-  const onEmailChange = e => setEmail(e.target.value);
-  const { register, handleSubmit, formState: {errors} } = useForm(); */
-  
-  //let success = true; 
-  //let history = useNavigate(); 
+  const [ userContext ] = useContext(UserContext);
 
-  /*const onSubmit = async (e) => {
-    console.log(firstname); 
-    console.log(phonenr); 
-    console.log(email); 
-        
-    const data =  { firstname, phonenr, email};
-    console.log(data); 
-
-    const requestOptions = {
-      method: 'POST',
-      headers: {"Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    };
-    success = await fetch(apiUrl + '/custom/addUser', requestOptions);
-    
-    if(success){
-      history.push('/tulkur');
-    }
-    else{
-      console.log("Virkar ekki");
-    }
-  }*/
-  
-  //eslint-disable-next-line} 
-  //const [setShowMessage] = useState(false);
-  //const [setFormData] = useState({});
-  
   const validate = (data) => {
     let errors = {};
 
@@ -71,7 +36,10 @@ export function AddCustomForm() {
 
     const requestOptions = {
       method: 'POST',
-      headers: {"Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userContext.token}`,
+      },
       body: JSON.stringify(data)
     };
 

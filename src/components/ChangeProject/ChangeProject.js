@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Column } from 'primereact/column';
@@ -7,10 +7,12 @@ import { Dropdown } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { classNames } from 'primereact/utils';
+import { UserContext } from '../../context/UserContext';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function ChangeProjectForm(id) {
+  const [ userContext ] = useContext(UserContext);
   
   let emptyProduct = [{
     id: null,
@@ -51,7 +53,14 @@ export function ChangeProjectForm(id) {
   useEffect(() => {
       async function fetchData(){
       setLoading(true); 
-      setError(null); 
+      setError(null);   
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userContext.token}`,
+        },
+      }
 
       let json_project; 
       let json_interpreter;
@@ -60,8 +69,8 @@ export function ChangeProjectForm(id) {
         let url_project = apiUrl + '/project/allProject'; 
         let url_interpreter = apiUrl + '/tulkur/getName';
 
-        const projectresult = await fetch(url_project);
-        const interpreterresult = await fetch(url_interpreter);
+        const projectresult = await fetch(url_project, requestOptions);
+        const interpreterresult = await fetch(url_interpreter, requestOptions);
         
         if(!projectresult.ok && interpreterresult.ok){
           throw new Error('Ekki ok');
@@ -153,10 +162,13 @@ export function ChangeProjectForm(id) {
      console.log(zdata); 
      
      const requestOptions = {
-       method: 'POST',
-       headers: {"Content-Type": "application/json" },
-       body: JSON.stringify(zdata)
-     };
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userContext.token}`,
+      },
+      body: JSON.stringify(zdata)
+    };
      
      success = await fetch(url, requestOptions);
        

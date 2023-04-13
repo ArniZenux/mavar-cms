@@ -4,17 +4,13 @@ import { Password } from 'primereact/password';
 import { classNames } from 'primereact/utils';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-import { Checkbox } from 'primereact/checkbox';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function LoginForm() {
-  const [checked1, setChecked1] = useState(false);
-  const [showMessage, setShowMessage] = useState(false);
   const [formData, setFormData] = useState({});
-  
   const [userContext, setUserContext] = useContext(UserContext);
 
   const validate = (data) => {
@@ -36,34 +32,31 @@ export function LoginForm() {
   
   const onSubmit = async (data, form, e) => {
     setFormData(data);
-    setShowMessage(true);
-    console.log(data); 
+
     const requestOptions = {
       method: 'POST',
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(data)
     };
 
-    await fetch(apiUrl + '/login', requestOptions)
+    await fetch(apiUrl + '/admin/login', requestOptions)
       .then(async res => {
-        console.log(res);
         const data_token = await res.json(); 
-        console.log(data_token); 
         setUserContext(oldValues => 
           { return { ...oldValues, token:data_token.token }
         });
+        form.restart();
       })
       .catch(err => {
-        console.log('Error response', err);
+        console.error('Error response', err);
         //setErrorMessages(res.error);
       })
-
-    form.restart();
   };
-  
-  console.log('header', userContext);
-  console.log(showMessage);
-  console.log(formData);
+
+ // eslint-disable-next-line
+ let userContext_ = userContext; 
+ // eslint-disable-next-line
+ let formData_ = formData;
   
   const isFormFieldValid = (meta) => !!(meta.touched && meta.error);
   const getFormErrorMessage = (meta) => {
@@ -72,12 +65,12 @@ export function LoginForm() {
 
   return (
     <div className="flex justify-content-center">
-      <div className="surface-card p-4 shadow-3 border-round w-full lg:w-5">
+      <div className="surface-card mt-5 p-4 shadow-3 border-round w-full lg:w-4">
         <div className="text-center mb-5">
-          <div className="text-900 text-3xl font-medium mb-3">Mávar - Bókunarsíða (CMS)</div>
-          <span className="text-600 font-medium line-height-3">Innskráning</span>
+          <div className="text-900 text-3xl font-medium mb-3">Mávar - Innskráning</div>
+          <span className="text-600 font-medium line-height-3">Ekki með aðgengi?</span>
+          <Link className="font-medium no-underline ml-2 text-blue-500 cursor-pointer" to="/register">Stofna nýju aðgengi</Link><br/>        
         </div>
-
         <Form onSubmit={onSubmit} initialValues={{email: '', password: ''}} validate={validate} render={({ handleSubmit }) => (
           <form onSubmit={handleSubmit} className="p-fluid">
           <Field name="email" render={({ input, meta }) => (
@@ -93,25 +86,18 @@ export function LoginForm() {
           <Field name="password" render={({ input, meta }) => (
             <div className="field md:mb-4">
               <span className="p-float-label">
-                <Password id="password" {...input} feedback={false} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
+                <Password id="password" {...input} toggleMask feedback={false} className={classNames({ 'p-invalid': isFormFieldValid(meta) })} />
                 <label htmlFor="password" className={classNames({ 'p-error': isFormFieldValid(meta) })}>Lyklaorð*</label>
               </span>
               {getFormErrorMessage(meta)}
             </div>
           )} />
-          <div className="flex align-items-center justify-content-between mb-6">
-            <div className="flex align-items-center">
-              <Checkbox id="rememberme" className="mr-2" checked={checked1} onChange={(e) => setChecked1(e.checked)} />
-              <label htmlFor="rememberme">Mundu mér</label>
-            </div>
+          <div className="flex align-items-center justify-content-between mb-4">
            <Link className="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer" to={'/reset'}>Gleymt lyklaorð?</Link>
           </div>
           <Button label="Skrá inn" icon="pi pi-user" className="mb-3 w-full" />
         </form>
         )} />
-
-        <Link className="no-underline text-blue-500 text-right line-height-3" to="/register">Nýskráning</Link><br/>        
-
       </div>
     </div>
   );

@@ -1,12 +1,14 @@
-import React, { useEffect, useState  } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
+import { UserContext } from '../../context/UserContext';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function InterpreterProject(  ) {
+  const [ userContext ] = useContext(UserContext);
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
   const [APIData, setAPIData] = useState([]);
@@ -20,12 +22,19 @@ export function InterpreterProject(  ) {
       setLoading1(false); 
       setError(null); 
       initFilters1();
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userContext.token}`,
+        },
+      }
       let json; 
 
       try {
         let url = apiUrl + '/project/allProject'; 
         
-        const result = await fetch(url);
+        const result = await fetch(url, requestOptions);
         
         if(!result.ok){
           throw new Error('Ekki ok');

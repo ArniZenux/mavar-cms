@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Calendar } from "primereact/calendar";
+import { UserContext } from '../../context/UserContext';
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -27,37 +28,44 @@ let z_idverkefni = 0;
 let EventLists = [];
 
 export function DataTofla( {id} ) {
+  const [ userContext ] = useContext(UserContext);
   const [verkefniData, setVerkefniData] = useState(eventsList); 
   const [productDialog, setProductDialog] = useState(false);
   const [deleteDialog, setDeleteDialog] = useState(false);
   let [ zselectInfo, setSelectInfo] = useState('');
   let [ zDeleteInfo, setDeleteInfo] = useState('');
-  
+ 
   let [title , setTitle] = useState('');
   let [stadur , setStadur] = useState('');
   let [start, setStart] = useState("00:00");
   let [last, setLast] = useState("00:00");
 
   useEffect(() => {
-
     async function fetchTulkurData(){
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userContext.token}`,
+        },
+      }
       let json2;
 
       EventLists = [];
       z_idverkefni = 0;
 
       try{
-        const apiUrlId = apiUrl + '/project/events/';
+        const apiUrlId = apiUrl + '/calander/events/';
         const url = new URL(id, apiUrlId); 
-      
-        const verkefni_result = await fetch(url); 
         
+        const verkefni_result = await fetch(url, requestOptions); 
+
         if(!verkefni_result){
           throw new Error('Verkefn_result er ekki OK!');
         }
           
         json2 = await verkefni_result.json();
-
+        console.log(json2); 
         json2.forEach(data => {
           let idx = data.idverkefni;
           let heiti = data.title;

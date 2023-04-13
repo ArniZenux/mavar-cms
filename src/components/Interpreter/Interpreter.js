@@ -1,12 +1,14 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Dropdown } from 'primereact/dropdown';
 import { InputText } from 'primereact/inputtext';
+import { UserContext } from '../../context/UserContext';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function TulkurList() {
+  const [ userContext ] = useContext(UserContext);
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
   const [APIData, setAPIData] = useState([]);
@@ -16,13 +18,19 @@ export function TulkurList() {
     async function fetchData(){
       setLoading(true); 
       setError(null); 
-
       let json; 
+
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userContext.token}`,
+        },
+      }
 
       try {
         let url = apiUrl + '/tulkur';
-
-        const result = await fetch(url); 
+        const result = await fetch(url, requestOptions); 
         
         if(!result.ok){
           throw new Error('Ekki ok');
@@ -52,16 +60,16 @@ export function TulkurList() {
 
     try {
       
-      //console.log(newData)
-      //console.log(newData.id);
-
       if( newData.zname === '' || newData.phonenr === '' || newData.email === '' ) {
         console.log('Empty');
       }
        else {
         const requestOptions = {
           method: 'POST',
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userContext.token}`,
+          },
           body: JSON.stringify(newData)
         };
         
@@ -138,7 +146,7 @@ export function TulkurList() {
     )
   }
 
-  if( APIData.length === 0){
+  if(APIData.length === 0){
      return (
       <div className="card">
           <div className="text-900 text-3xl font-medium mb-3">Enginn túlkur...</div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState, useContext } from 'react'; 
 import { Form, Field } from 'react-final-form';
 import { Calendar } from "primereact/calendar";
 import { InputText } from 'primereact/inputtext';
@@ -6,6 +6,8 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
 import { Button } from 'primereact/button';
 import { classNames } from 'primereact/utils';
+import { UserContext } from '../../context/UserContext';
+
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -18,6 +20,7 @@ export function AddProjectForm( ) {
   let [last_time, setLastTime] = useState("00:00");
   let [interpreter, setInterpreter] = useState(interpreterJson);
   let [custom, setCustom] = useState(customJson);
+  const [ userContext ] = useContext(UserContext);
 
   const vettvangalist = [
     { name: 'Almennt'},
@@ -32,13 +35,19 @@ export function AddProjectForm( ) {
 
       let json_interpreter; 
       let json_custom; 
-
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userContext.token}`,
+        },
+      }
       try {
         let url_interpreter = apiUrl + '/tulkur/getName';
         let url_custom = apiUrl + '/custom/getNameCustom';
         
-        const interpreterresult = await fetch(url_interpreter);
-        const customresult = await fetch(url_custom); 
+        const interpreterresult = await fetch(url_interpreter,  requestOptions);
+        const customresult = await fetch(url_custom, requestOptions); 
         
         if(!interpreterresult.ok || !customresult.ok){
           throw new Error('Fetch data is not ok');
@@ -131,7 +140,7 @@ export function AddProjectForm( ) {
     //let success_work = true; 
     
     projectdata.push(data.desc);
-    projectdata.push(data.dropdown.id);
+    projectdata.push(data.dropdown.zidcustom);
     projectdata.push(data.place);
     projectdata.push(data.dropdown2.name);
     projectdata.push(data.dropdown3.id);
@@ -152,29 +161,18 @@ export function AddProjectForm( ) {
 
     console.log(projectdata);
     
-    const requestOptionsProject = {
+    const requestOptions = {
       method: 'POST',
-      headers: {"Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userContext.token}`,
+      },
       body: JSON.stringify(projectdata)
     };
 
-    /*const requestOptionsOrder = {
-      method: 'POST',
-      headers: {"Content-Type": "application/json" },
-      body: JSON.stringify(orderdata)
-    };
-
-    const requestOptionsWork = {
-      method: 'POST',
-      headers: {"Content-Type": "application/json" },
-      body: JSON.stringify(workdata)
-    };*/
-    
     let url_project = apiUrl + '/project/add_project'; 
-    /*let url_order; 
-    let url_work; */
 
-    success_project = await fetch(url_project, requestOptionsProject);
+    success_project = await fetch(url_project, requestOptions);
     //success_order = await fetch(apiUrl + '/project/add_order_project', requestOptionsOrder);
     //success_work = await fetch(apiUrl + '/project/add_work_project', requestOptionsWork);
     

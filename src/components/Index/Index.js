@@ -1,5 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
-//import { Link } from 'react-router-dom';
+import React, {useState, useEffect, useRef, useContext} from 'react';
 import { classNames } from 'primereact/utils';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -8,14 +7,15 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Dropdown } from 'primereact/dropdown';
-//import { Toast } from 'primereact/toast';
+import { UserContext } from '../../context/UserContext';
+
 import './DataTableDemo.css';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function Index() {
   let emptyBeidni = {
-    id: null,
+    zidbeidni: null,
     zdesc: '',
     place : '',
     zday: '',
@@ -32,8 +32,7 @@ export function Index() {
   }];
 
   const interval = useRef(0); 
-  //const toast = useRef(null);
-
+  const [ userContext ] = useContext(UserContext);
   const [error, setError] = useState(null);
   const [product, setProduct] = useState(emptyBeidni);
   const [products, setProducts] = useState(null);
@@ -78,18 +77,23 @@ export function Index() {
     async function fetchData(){
 
       let json_interpreter; 
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userContext.token}`,
+        },
+      }
 
       try {
         let url_interpreter = apiUrl + '/tulkur/getName';
         
-        const interpreterresult = await fetch(url_interpreter);
+        const interpreterresult = await fetch(url_interpreter, requestOptions);
         
         if(!interpreterresult.ok){
           throw new Error('Fetch data is not ok');
         }
         json_interpreter = await interpreterresult.json();
-        
-        console.log(json_interpreter);
 
       }
       catch(e){
@@ -152,7 +156,7 @@ export function Index() {
     let success = true; 
     let url = apiUrl + '/beidnibokun/hafnaBeidni';
 
-    zdata.push(product.id); 
+    zdata.push(product.zidbeidni); 
 
     const requestOptions = {
       method: 'POST',
@@ -179,7 +183,7 @@ export function Index() {
     let success = true; 
     let url = apiUrl + '/beidnibokun/afbokaBeidni';
 
-    zdata.push(product.id); 
+    zdata.push(product.zidbeidni); 
 
     const requestOptions = {
       method: 'POST',
@@ -206,7 +210,7 @@ export function Index() {
     let success = true; 
     let url = apiUrl + '/beidnibokun/samtykktBeidni';
 
-    zdata.push(product.id); 
+    zdata.push(product.zidbeidni); 
     zdata.push(interpreterOne.zname);
 
     console.log(zdata); 
@@ -236,7 +240,7 @@ export function Index() {
     const change = 1; 
     let url = apiUrl + '/beidnibokun/opinBeidni';
 
-    zdata.push(product.id); 
+    zdata.push(product.zidbeidni); 
     zdata.push(change);
 
     console.log(zdata); 
@@ -327,7 +331,7 @@ export function Index() {
       <Button label="Staðfesta" icon="pi pi-check" className="p-button-rounded p-button-success mr-2" onClick={stadfestProduct} />
       <Button label="Afbóka" icon="pi pi-check" className="p-button-rounded p-button-warning" onClick={afbokaProduct} />
       <Button label="Hafna" icon="pi pi-check" className="p-button-rounded p-button-danger mr-2" onClick={hafnaProduct} />
-      <Button label="Hætta" icon="pi pi-times" className="p-button-text " onClick={hideDialog} />
+      <Button label="Loka" icon="pi pi-times" className="p-button-text " onClick={hideDialog} />
     </React.Fragment>
   );
 

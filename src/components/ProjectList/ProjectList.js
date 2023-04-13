@@ -1,10 +1,12 @@
-import React, { useEffect, useState  } from 'react';
+import React, { useEffect, useState, useContext  } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { UserContext } from '../../context/UserContext';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function Project(  { id }  ) {
+  const [ userContext ] = useContext(UserContext);
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null);
   const [APIData, setAPIData] = useState([]);
@@ -13,20 +15,24 @@ export function Project(  { id }  ) {
       async function fetchData(){
       setLoading(true); 
       setError(null); 
-
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userContext.token}`,
+        },
+      }
       let json; 
 
       try {
         let url = apiUrl + '/project/allProject';
         
-        const result = await fetch(url);
-        
+        const result = await fetch(url, requestOptions);
         if(!result.ok){
           throw new Error('Ekki ok');
         }
         json = await result.json();
-        //console.log(json); 
-
+        console.log(json); 
       }
       catch(e){
         console.warn('unable to fetch data', e); 
