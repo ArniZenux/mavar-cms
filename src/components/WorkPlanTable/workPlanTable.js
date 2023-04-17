@@ -46,7 +46,7 @@ export function WorkPlanTable() {
         setTulkurData(json); 
        }
        fetchTulkurData();
-  }, []);
+  }, [userContext]);
 
   if(error){
     return (

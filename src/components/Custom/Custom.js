@@ -47,7 +47,7 @@ export function CustomList() {
      }
    
     fetchData(); 
-  }, []);
+  }, [userContext]);
 
   const onRowEditComplete2 = async (e) => {
     let _APIData = [...APIData];

@@ -46,7 +46,7 @@ export function Project(  { id }  ) {
      }
    
     fetchData(); 
-  }, []);
+  }, [userContext]);
  
   if(error){
     return (

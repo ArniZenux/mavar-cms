@@ -103,7 +103,7 @@ export function Index() {
       setInterpreter(json_interpreter); 
      }
      fetchData(); 
-  }, []); 
+  }, [userContext]); 
 
   if(error){
    return (

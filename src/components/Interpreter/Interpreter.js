@@ -49,12 +49,11 @@ export function TulkurList() {
      }
    
     fetchData(); 
-  }, []);
+  }, [userContext]);
  
   const onRowEditComplete2 = async (e) => {
     let _APIData = [...APIData];
     let { newData, index } = e;
-    let success = true; 
 
     _APIData[index] = newData;
 
@@ -75,7 +74,7 @@ export function TulkurList() {
         
         let url = apiUrl + '/tulkur/updateinterpreter/' + newData.id; 
         
-        success = await fetch(url , requestOptions);
+        await fetch(url , requestOptions);
        
         setAPIData(_APIData);
         }

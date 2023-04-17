@@ -12,7 +12,6 @@ import { UserContext } from '../../context/UserContext';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export function ChangeProjectForm(id) {
-  const [ userContext ] = useContext(UserContext);
   
   let emptyProduct = [{
     id: null,
@@ -49,6 +48,7 @@ export function ChangeProjectForm(id) {
   const [submitted, setSubmitted] = useState(false);
   const [productDialog, setProductDialog] = useState(false);
   const [deleteProductDialog, setDeleteProductDialog] = useState(false);
+  const [ userContext ] = useContext(UserContext);
     
   useEffect(() => {
       async function fetchData(){
@@ -78,7 +78,8 @@ export function ChangeProjectForm(id) {
 
         json_interpreter = await interpreterresult.json();
         json_project = await projectresult.json();
-        // console.log(json_interpreter); 
+        
+        console.log(json_interpreter); 
         console.log(json_project); 
 
       }
@@ -95,7 +96,7 @@ export function ChangeProjectForm(id) {
     }
    
     fetchData(); 
-  }, []);
+  }, [userContext]);
  
   if(error){
     return (
@@ -301,7 +302,7 @@ export function ChangeProjectForm(id) {
 
           <div className="field">
             <label htmlFor="dropdown">Túlkur</label>
-            <Dropdown inputId="dropdown" value={product.zname} options={interpreter} onChange={onInputInterpreter} optionLabel="zname" placeholder={''}/>
+            <Dropdown inputId="dropdown" value={product.zname} options={interpreter} onChange={onInputInterpreter} optionLabel="zname" placeholder={product.zname}/>
             {submitted && !interpreter.zname && <small className="p-error">Vantar túlk.</small>}
           </div>
 

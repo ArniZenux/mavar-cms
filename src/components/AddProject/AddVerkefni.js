@@ -67,7 +67,7 @@ export function AddProjectForm( ) {
       setCustom(json_custom); 
      }
      fetchData(); 
-  }, []); 
+  }, [userContext]); 
   
   const validate = (data) => {
     let errors = {};

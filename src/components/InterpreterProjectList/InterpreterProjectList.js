@@ -55,7 +55,7 @@ export function InterpreterProject(  ) {
      }
    
     fetchData(); 
-  }, []);
+  }, [userContext]);
   
   const onGlobalFilterChange1 = (e) => {
     const value = e.target.value;

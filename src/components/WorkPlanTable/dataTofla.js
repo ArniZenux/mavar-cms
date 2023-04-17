@@ -29,11 +29,11 @@ let EventLists = [];
 
 export function DataTofla( {id} ) {
   const [ userContext ] = useContext(UserContext);
-  const [verkefniData, setVerkefniData] = useState(eventsList); 
+  //const [verkefniData, setVerkefniData] = useState(eventsList); 
   const [productDialog, setProductDialog] = useState(false);
   const [deleteDialog, setDeleteDialog] = useState(false);
   let [ zselectInfo, setSelectInfo] = useState('');
-  let [ zDeleteInfo, setDeleteInfo] = useState('');
+  //let [ zDeleteInfo, setDeleteInfo] = useState('');
  
   let [title , setTitle] = useState('');
   let [stadur , setStadur] = useState('');
@@ -91,11 +91,11 @@ export function DataTofla( {id} ) {
       } catch(e) {
         console.warn("Error", e);     
       }
-      setVerkefniData(json2);
+      //setVerkefniData(json2);
       //console.log(z_idverkefni); 
     }
   fetchTulkurData();
-  },[id]);
+  },[id,userContext]);
 
   const hideProductDialog = () => {
     setProductDialog(false);
@@ -136,12 +136,12 @@ export function DataTofla( {id} ) {
                       satt, 
                       id
                   };
-      //console.log(data); 
-      const requestOptions = {
+      console.log(data); 
+      /*const requestOptions = {
         method: 'POST',
         headers: {"Content-Type": "application/json" },
         body: JSON.stringify(data)
-      };
+      };*/
       
       setStart('00:00');
       setLast('00:00');
@@ -183,14 +183,14 @@ export function DataTofla( {id} ) {
   function handleEventClick(selectInfo){
     setDeleteDialog(true);
     console.log(selectInfo.event.id);
-    setDeleteInfo(selectInfo);
+    //setDeleteInfo(selectInfo);
   }
 
   const pickTime = (e) => {
     let hour = new Date(e).getHours() ;
     let min = new Date(e).getMinutes();
     let start_time = `${hour}:${min}`; 
-    //console.log(start_time); 
+    console.log(start_time); 
   }
 
   return (
