@@ -38,8 +38,6 @@ Aðgerðir í bókunarkerfi:
 * [![PrimeReact][PrimeFaces]][ReactPrime-url]
 
 ## Getting Started
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
@@ -49,9 +47,13 @@ This is an example of how to list things you need to use the software and how to
   npm install npm@latest -g
   ```
 
-### Installation
+### Backend system 
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+* [![Backend][mavar-back]
+Það er nauðsynlegt að keyra fyrst á backend system til að geta keyrt bókunarkerfi.  
+Endanlega á að kíkja á síðuna og download backend-system.
+
+### Installation
 
 1. Clone the repo
    ```sh
@@ -66,3 +68,4 @@ _Below is an example of how you can instruct your audience on installing and set
 [React-url]: https://reactjs.org/
 [PrimeFaces]: https://primefaces.org/cdn/primereact/images/primereact-logo-dark.svg
 [ReactPrime-url]: https://www.primefaces.org/
+[mavar-back]: https://github.com/ArniZenux/mavar-server
