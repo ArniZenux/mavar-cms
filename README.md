@@ -50,6 +50,7 @@ This is an example of how to list things you need to use the software and how to
 ### Backend system 
 
 * [![Backend][mavar-back]
+
 Það er nauðsynlegt að keyra fyrst á backend system til að geta keyrt bókunarkerfi.  
 Endanlega á að kíkja á síðuna og download backend-system.
 
