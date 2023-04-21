@@ -1,10 +1,25 @@
 ## Mávar - Bókunarkerfi
 Viðskiptavinur getur pantað túlk með því að senda beðini í gegnum pöntunarkerfi. 
-Starfsfólk túlkaþjónustunnar fær beiðni í gegnum bókunarkerfið og skrár túlk í verkefni. Þá fær viðskiptavinur skilaboð um að túlkur komi.
+Starfsfólk túlkaþjónustunnar fær beiðni í gegnum bókunarkerfið og skrár túlk í verkefni. 
+Þá fær viðskiptavinur skilaboð um að túlkur komi.
 
-Version : 0.3
+Útgáfunúmer : 0.3
 
-## Myndir af bókunarkerfi.
+Aðgerðir í bókunarkerfi: 
+* Skoða nýbeiðni
+* Samþykkja beiðni ef túlkur er laus á tiltekni tíma.
+* Hafna ef túlkur er ekki laus. 
+* Afbókun ef viðskiptavinur kæmst ekki eða eitthvað hafi komið upp á. 
+* Skrá nýtúlk 
+* Breyta túlk
+* Skrá viðskiptavin
+* Breyta viðskiptavin
+* Skoða verkefnalista og leita að túlk sem vinnur á tiltekni verkefni. 
+* Skrá nýtt verkefni ef viðskiptavinur ósk eftir túlki.
+* Staða túlkaverkefna.
+* Dagtal túlkaverkefna. 
+
+## Images of bókunarkerfi.
 ![alt text](https://github.com/ArniZenux/mavar-cms/blob/main/image/Innskraning.jpg)
 ![alt text](https://github.com/ArniZenux/mavar-cms/blob/main/image/bokun_nybeidni.jpg)
 ![alt text](https://github.com/ArniZenux/mavar-cms/blob/main/image/bokun_breyta_beidni.jpg)
