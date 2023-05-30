@@ -66,6 +66,7 @@ Endanlega á að kíkja á síðuna og download backend-system.
    ```
 
 ### Try it ? 
+* www: bokun.netlify.app
 * username : admin@shh.is
 * password : 123
 
