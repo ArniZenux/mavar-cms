@@ -65,6 +65,10 @@ Endanlega á að kíkja á síðuna og download backend-system.
    npm install
    ```
 
+### Try it ? 
+* username : admin@shh.is
+* password : 123
+
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
 [PrimeFaces]: https://primefaces.org/cdn/primereact/images/primereact-logo-dark.svg
