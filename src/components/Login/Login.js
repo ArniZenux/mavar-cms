@@ -4,7 +4,7 @@ import { Password } from 'primereact/password';
 import { classNames } from 'primereact/utils';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
-import { Link } from 'react-router-dom';
+//import { Link } from 'react-router-dom';
 import { UserContext } from '../../context/UserContext';
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -67,9 +67,8 @@ export function LoginForm() {
     <div className="flex justify-content-center">
       <div className="surface-card mt-5 p-4 shadow-3 border-round w-full lg:w-4">
         <div className="text-center mb-5">
-          <div className="text-900 text-3xl font-medium mb-3">Mávar - Innskráning</div>
-          <span className="text-600 font-medium line-height-3">Ekki með aðgengi?</span>
-          <Link className="font-medium no-underline ml-2 text-blue-500 cursor-pointer" to="/register">Stofna nýju aðgengi</Link><br/>        
+          <div className="text-900 text-3xl font-medium mb-3">Mávar - Bókunarkerfi</div>
+          <span className="text-600 font-medium line-height-3">Innskráning</span>
         </div>
         <Form onSubmit={onSubmit} initialValues={{email: '', password: ''}} validate={validate} render={({ handleSubmit }) => (
           <form onSubmit={handleSubmit} className="p-fluid">
@@ -92,9 +91,6 @@ export function LoginForm() {
               {getFormErrorMessage(meta)}
             </div>
           )} />
-          <div className="flex align-items-center justify-content-between mb-4">
-           <Link className="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer" to={'/reset'}>Gleymt lyklaorð?</Link>
-          </div>
           <Button label="Skrá inn" icon="pi pi-user" className="mb-3 w-full" />
         </form>
         )} />
@@ -102,3 +98,10 @@ export function LoginForm() {
     </div>
   );
 } 
+
+/*
+  <Link className="font-medium no-underline ml-2 text-blue-500 cursor-pointer" to="/register">Stofna nýju aðgengi</Link><br/>        
+  <div className="flex align-items-center justify-content-between mb-4">
+    <Link className="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer" to={'/reset'}>Gleymt lyklaorð?</Link>
+  </div>
+*/
