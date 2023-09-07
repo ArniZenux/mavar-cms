@@ -204,17 +204,16 @@ export function Index() {
     opinBeidni(); 
   }
   
+  // staðfest í tblBeiðni
   const stadfestProduct = async () => {
     //showStadfest();
     let zdata = [];
     let success = true; 
     let url = apiUrl + '/beidnibokun/samtykktBeidni';
-
+    
     zdata.push(product.zidbeidni); 
     zdata.push(interpreterOne.zname);
 
-    console.log(zdata); 
-    
     const requestOptions = {
       method: 'POST',
       headers: {"Content-Type": "application/json" },
@@ -229,9 +228,10 @@ export function Index() {
     else {
       console.error("Don't success");
     }
-
+    
     setProductDialog(false);
     opinBeidni(); 
+    skraProject(); 
   }
 
   const opinBeidni = async () => {
@@ -242,9 +242,7 @@ export function Index() {
 
     zdata.push(product.zidbeidni); 
     zdata.push(change);
-
-    console.log(zdata); 
-    
+   
     const requestOptions = {
       method: 'POST',
       headers: {"Content-Type": "application/json" },
@@ -261,6 +259,11 @@ export function Index() {
     }
   }
 
+  const skraProject = () =>  {
+    
+    console.log(product); 
+
+  }
   const editProduct = (product) => {
     setProduct({...product});
     setInterpreterOne(null); 
