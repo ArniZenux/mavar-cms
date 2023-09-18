@@ -89,7 +89,7 @@ export function WorkPlanTable() {
               <ListBox className="mt-7" 
                 value={selectedInterpreter} 
                 options={tulkurData} 
-                onChange={(e) => setSelectedInterpreter(e.value.id)}
+                onChange={(e) => setSelectedInterpreter(e.value.i_id)}
                 optionLabel="zname" 
               />
             </div>

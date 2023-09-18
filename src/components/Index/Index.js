@@ -212,6 +212,17 @@ export function Index() {
     let url = apiUrl + '/beidnibokun/samtykktBeidni';
     
     zdata.push(product.zidbeidni); 
+    zdata.push(product.idcustom); 
+    zdata.push(product.zdesc);
+    zdata.push(product.place);
+    zdata.push(product.zday);
+    zdata.push(product.start_time);
+    zdata.push(product.last_time);
+    zdata.push('vantar vettvangur');
+    zdata.push(product.start_time);
+    zdata.push(product.last_time);
+    zdata.push(true); 
+    zdata.push(interpreterOne.i_id);
     zdata.push(interpreterOne.zname);
 
     const requestOptions = {

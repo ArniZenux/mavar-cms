@@ -182,15 +182,16 @@ export function DataTofla( {id} ) {
 
   function handleEventClick(selectInfo){
     setDeleteDialog(true);
-    console.log(selectInfo.event.id);
+    //console.log(selectInfo.event.id);
     //setDeleteInfo(selectInfo);
   }
 
   const pickTime = (e) => {
     let hour = new Date(e).getHours() ;
     let min = new Date(e).getMinutes();
+    // eslint-disable-next-line
     let start_time = `${hour}:${min}`; 
-    console.log(start_time); 
+    //console.log(start_time); 
   }
 
   return (
